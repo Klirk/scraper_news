@@ -1,0 +1,82 @@
+services:
+  # PostgreSQL база данных
+  postgres:
+    image: postgres:latest
+    container_name: ft_scraper_db
+    environment:
+      POSTGRES_DB: ft_news
+      POSTGRES_USER: scraper_user
+      POSTGRES_PASSWORD: scraper_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U scraper_user -d ft_news"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+    networks:
+      - scraper_network
+
+  # Основное приложение скрапера
+  scraper:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ft_scraper_app
+    environment:
+      # Настройки базы данных
+      DATABASE_URL: postgresql://scraper_user:scraper_password@postgres:5432/ft_news
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ft_news
+      DB_USER: scraper_user
+      DB_PASSWORD: scraper_password
+
+      # Настройки скрапинга
+      SCRAPER_INTERVAL_HOURS: 1
+      INITIAL_DAYS_BACK: 30
+      MAX_CONCURRENT_REQUESTS: 5
+      REQUEST_DELAY: 2
+
+      # Настройки логирования
+      LOG_LEVEL: INFO
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
+    restart: unless-stopped
+    networks:
+      - scraper_network
+
+  # pgAdmin для управления БД
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: ft_scraper_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@scraper.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    restart: unless-stopped
+    networks:
+      - scraper_network
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+
+networks:
+  scraper_network:
+    driver: bridge
