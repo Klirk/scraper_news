@@ -1,13 +1,32 @@
 FROM python:3.12-slim
 
-# Установка системных зависимостей
+# Установка системных зависимостей для Playwright
 RUN apt-get update && apt-get install -y \
     wget \
     curl \
     gnupg \
     unzip \
+    # Зависимости для Playwright
+    libnss3 \
+    libnspr4 \
+    libdbus-1-3 \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libdrm2 \
+    libxkbcommon0 \
+    libgtk-3-0 \
+    libgbm1 \
+    libasound2 \
+    # Дополнительные зависимости
+    libxrandr2 \
+    libxcomposite1 \
+    libxss1 \
+    libgconf-2-4 \
+    libxtst6 \
+    libxdamage1 \
+    libxi6 \
+    libxfixes3 \
     && rm -rf /var/lib/apt/lists/*
-
 
 # Создание рабочей директории
 WORKDIR /app
@@ -18,15 +37,29 @@ COPY requirements.txt .
 # Установка Python зависимостей
 RUN pip install --no-cache-dir -r requirements.txt
 
-
-RUN playwright install
+# Установка Playwright браузеров (от root пользователя)
+RUN playwright install-deps chromium
+RUN playwright install chromium
 # Копирование кода приложения
 COPY . .
 
+# Создание директорий для логов и данных
+RUN mkdir -p /app/logs /app/data
+
 # Создание пользователя для безопасности
 RUN useradd --create-home --shell /bin/bash scraper && \
-    chown -R scraper:scraper /app
+    chown -R scraper:scraper /app && \
+    chmod -R 755 /app/logs /app/data
+
+# Настройка переменных окружения для Playwright
+ENV PLAYWRIGHT_BROWSERS_PATH=/home/scraper/.cache/ms-playwright
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=0
+
+# Переключаемся на пользователя scraper и устанавливаем браузеры от его имени
 USER scraper
+
+# Установка браузеров от имени пользователя scraper
+RUN playwright install chromium
 
 # Открытие порта (если нужен API)
 EXPOSE 8000

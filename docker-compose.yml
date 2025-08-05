@@ -29,7 +29,7 @@ services:
     container_name: ft_scraper_app
     environment:
       # Настройки базы данных
-      DATABASE_URL: postgresql://scraper_user:scraper_password@postgres:5432/ft_news
+      DATABASE_URL: postgresql+asyncpg://scraper_user:scraper_password@postgres:5432/ft_news
       DB_HOST: postgres
       DB_PORT: 5432
       DB_NAME: ft_news

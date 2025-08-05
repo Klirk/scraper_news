@@ -6,8 +6,13 @@ from sqlalchemy.ext.asyncio import (
 )
 from typing import AsyncGenerator
 
-# Пример строки подключения к PostgreSQL через asyncpg
-DATABASE_URL = "postgresql+asyncpg://postgres:scraper_password@localhost:5432/ft_news"
+# Строка подключения к PostgreSQL через asyncpg
+import os
+
+DATABASE_URL = os.getenv(
+    "DATABASE_URL", 
+    "postgresql+asyncpg://scraper_user:scraper_password@postgres:5432/ft_news"
+)
 
 # Создаём движок
 engine: AsyncEngine = create_async_engine(
@@ -22,8 +27,25 @@ async_session = async_sessionmaker(
     class_=AsyncSession
 )
 
-
 # Асинхронный dependency для FastAPI или ручного использования
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
     async with async_session() as session:
         yield session
+
+
+# Функция для создания таблиц в базе данных
+async def init_db() -> None:
+    """Создает все таблицы в базе данных согласно моделям"""
+    from app.models.models import Base
+    
+    async with engine.begin() as conn:
+        # Создаем все таблицы
+        await conn.run_sync(Base.metadata.create_all)
+        print("✅ Таблицы базы данных успешно созданы/обновлены")
+
+
+# Функция для закрытия подключений
+async def close_db() -> None:
+    """Закрывает подключения к базе данных"""
+    await engine.dispose()
+    print("🔌 Подключения к базе данных закрыты")
