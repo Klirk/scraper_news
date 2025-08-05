@@ -13,28 +13,6 @@ from sqlalchemy.orm import (
 class Base(DeclarativeBase):
     pass
 
-
-# Таблиця зв’язку для article_tags (many-to-many)
-article_tag_association = Table(
-    "article_tag_association",
-    Base.metadata,
-    Column("article_id", ForeignKey("articles.id"), primary_key=True),
-    Column("tag_id", ForeignKey("tags.id"), primary_key=True)
-)
-
-# Моделі для тегів та статей
-class Tag(Base):
-    __tablename__ = "tags"
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
-
-    # зворотний зв'язок з article
-    articles: Mapped[List["Article"]] = relationship(
-        back_populates="tags",
-        secondary=article_tag_association
-    )
-
 # Модель для статей
 class Article(Base):
     __tablename__ = "articles"
@@ -49,7 +27,6 @@ class Article(Base):
 
     published_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     scraped_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
-
     # додаткові поля
     subtitle: Mapped[Optional[str]] = mapped_column(String(512), nullable=True)
     image_url: Mapped[Optional[str]] = mapped_column(String(1024), nullable=True)
@@ -79,3 +56,4 @@ class RelatedArticle(Base):
     related_url: Mapped[str] = mapped_column(String(1024), nullable=False)
 
     article: Mapped["Article"] = relationship(back_populates="related_articles")
+
