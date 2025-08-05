@@ -4,12 +4,11 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
     AsyncSession
 )
-from sqlalchemy.orm import declarative_base
 from typing import AsyncGenerator
-import os
 
 # Пример строки подключения к PostgreSQL через asyncpg
 DATABASE_URL = "postgresql+asyncpg://postgres:scraper_password@localhost:5432/ft_news"
+
 # Создаём движок
 engine: AsyncEngine = create_async_engine(
     DATABASE_URL,
@@ -23,8 +22,6 @@ async_session = async_sessionmaker(
     class_=AsyncSession
 )
 
-# Базовый класс моделей
-Base = declarative_base()
 
 # Асинхронный dependency для FastAPI или ручного использования
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
