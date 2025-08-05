@@ -9,11 +9,7 @@ from typing import AsyncGenerator
 import os
 
 # Пример строки подключения к PostgreSQL через asyncpg
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql+asyncpg://user:password@localhost:5432/mydatabase"
-)
-
+DATABASE_URL = "postgresql+asyncpg://postgres:scraper_password@localhost:5432/ft_news"
 # Создаём движок
 engine: AsyncEngine = create_async_engine(
     DATABASE_URL,

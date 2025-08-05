@@ -8,9 +8,6 @@ RUN apt-get update && apt-get install -y \
     unzip \
     && rm -rf /var/lib/apt/lists/*
 
-# Установка браузера для Playwright
-RUN pip install playwright && \
-    playwright install
 
 # Создание рабочей директории
 WORKDIR /app
@@ -21,6 +18,8 @@ COPY requirements.txt .
 # Установка Python зависимостей
 RUN pip install --no-cache-dir -r requirements.txt
 
+
+RUN playwright install
 # Копирование кода приложения
 COPY . .
 
