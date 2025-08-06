@@ -1,0 +1,482 @@
+2025-08-06 07:39:23 | INFO | __main__:main:35 | 🚀 Запуск Financial Times скрапера...
+2025-08-06 07:39:23 | INFO | __main__:main:38 | 📊 Инициализация базы данных...
+2025-08-06 07:39:24 | INFO | app.db.database:init_db:50 | ✅ База данных инициализирована
+2025-08-06 07:39:24 | INFO | __main__:main:42 | ⏰ Запуск планировщика...
+2025-08-06 07:39:24 | INFO | app.scheduler.scheduler:start:49 | ⚡ Запуск планировщика задач...
+2025-08-06 07:39:24 | INFO | app.scraper.scraper:is_first_run:82 | 📊 Статей в базе: 1142, первый запуск: False
+2025-08-06 07:39:24 | INFO | app.scheduler.scheduler:start:74 | 🔄 Обычный запуск - используем адаптивный режим...
+2025-08-06 07:39:24 | INFO | app.scheduler.scheduler:adaptive_scrape_job:40 | 🤖 Запуск адаптивной задачи скрапинга...
+2025-08-06 07:39:24 | INFO | app.scraper.scraper:run_scraping:347 | 🚀 Запуск скрапинга Financial Times...
+2025-08-06 07:39:24 | INFO | app.scraper.scraper:init_browser:54 | 🌐 Браузер успешно инициализирован
+2025-08-06 07:39:24 | INFO | app.scraper.scraper:is_first_run:82 | 📊 Статей в базе: 1142, первый запуск: False
+2025-08-06 07:39:24 | INFO | app.scraper.scraper:run_scraping:365 | ⏰ Обычный запуск - собираем статьи за последний час...
+2025-08-06 07:39:24 | INFO | app.scraper.scraper:scrape_articles_with_pagination:236 | 📚 Начинаем скрапинг с пагинацией (макс. 5 страниц)...
+2025-08-06 07:39:24 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 1 (попытка 1/3): https://www.ft.com/world
+2025-08-06 07:39:29 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 26 элементов статей на странице 1
+2025-08-06 07:39:29 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:39:29 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 1 статей со страницы 1
+2025-08-06 07:39:30 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 2 (попытка 1/3): https://www.ft.com/world?page=2
+2025-08-06 07:39:34 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 2
+2025-08-06 07:39:34 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:39:34 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:39:34 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:39:34 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:39:34 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 0 статей со страницы 2
+2025-08-06 07:39:34 | WARNING | app.scraper.scraper:scrape_articles_with_pagination:247 | ⚠️ Страница 2 не содержит подходящих статей
+2025-08-06 07:39:35 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 3 (попытка 1/3): https://www.ft.com/world?page=3
+2025-08-06 07:39:40 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 3
+2025-08-06 07:39:40 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:39:40 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:39:40 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:39:40 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:39:40 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 0 статей со страницы 3
+2025-08-06 07:39:40 | WARNING | app.scraper.scraper:scrape_articles_with_pagination:247 | ⚠️ Страница 3 не содержит подходящих статей
+2025-08-06 07:39:41 | INFO | __main__:main:35 | 🚀 Запуск Financial Times скрапера...
+2025-08-06 07:39:41 | INFO | __main__:main:38 | 📊 Инициализация базы данных...
+2025-08-06 07:39:41 | INFO | app.db.database:init_db:50 | ✅ База данных инициализирована
+2025-08-06 07:39:41 | INFO | __main__:main:42 | ⏰ Запуск планировщика...
+2025-08-06 07:39:41 | INFO | app.scheduler.scheduler:start:49 | ⚡ Запуск планировщика задач...
+2025-08-06 07:39:41 | INFO | app.scraper.scraper:is_first_run:82 | 📊 Статей в базе: 1142, первый запуск: False
+2025-08-06 07:39:41 | INFO | app.scheduler.scheduler:start:74 | 🔄 Обычный запуск - используем адаптивный режим...
+2025-08-06 07:39:41 | INFO | app.scheduler.scheduler:adaptive_scrape_job:40 | 🤖 Запуск адаптивной задачи скрапинга...
+2025-08-06 07:39:41 | INFO | app.scraper.scraper:run_scraping:347 | 🚀 Запуск скрапинга Financial Times...
+2025-08-06 07:39:42 | INFO | app.scraper.scraper:init_browser:54 | 🌐 Браузер успешно инициализирован
+2025-08-06 07:39:42 | INFO | app.scraper.scraper:is_first_run:82 | 📊 Статей в базе: 1142, первый запуск: False
+2025-08-06 07:39:42 | INFO | app.scraper.scraper:run_scraping:365 | ⏰ Обычный запуск - собираем статьи за последний час...
+2025-08-06 07:39:42 | INFO | app.scraper.scraper:scrape_articles_with_pagination:236 | 📚 Начинаем скрапинг с пагинацией (макс. 5 страниц)...
+2025-08-06 07:39:42 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 1 (попытка 1/3): https://www.ft.com/world
+2025-08-06 07:39:48 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 26 элементов статей на странице 1
+2025-08-06 07:39:48 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:39:48 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 1 статей со страницы 1
+2025-08-06 07:39:49 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 2 (попытка 1/3): https://www.ft.com/world?page=2
+2025-08-06 07:39:53 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 2
+2025-08-06 07:39:53 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:39:53 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:39:53 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:39:53 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:39:53 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 0 статей со страницы 2
+2025-08-06 07:39:53 | WARNING | app.scraper.scraper:scrape_articles_with_pagination:247 | ⚠️ Страница 2 не содержит подходящих статей
+2025-08-06 07:39:54 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 3 (попытка 1/3): https://www.ft.com/world?page=3
+2025-08-06 07:39:58 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 3
+2025-08-06 07:39:58 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:39:58 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:39:58 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:39:58 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:39:58 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 0 статей со страницы 3
+2025-08-06 07:39:58 | WARNING | app.scraper.scraper:scrape_articles_with_pagination:247 | ⚠️ Страница 3 не содержит подходящих статей
+2025-08-06 07:39:59 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 4 (попытка 1/3): https://www.ft.com/world?page=4
+2025-08-06 07:40:03 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 4
+2025-08-06 07:40:03 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:40:03 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:40:03 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:40:03 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:40:03 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 0 статей со страницы 4
+2025-08-06 07:40:03 | WARNING | app.scraper.scraper:scrape_articles_with_pagination:247 | ⚠️ Страница 4 не содержит подходящих статей
+2025-08-06 07:40:03 | INFO | app.scraper.scraper:scrape_articles_with_pagination:251 | 🛑 Найдено 3 страницы подряд без статей, прекращаем скрапинг
+2025-08-06 07:40:03 | INFO | app.scraper.scraper:scrape_articles_with_pagination:268 | 🎉 Завершен скрапинг с пагинацией: собрано 1 статей с 4 страниц
+2025-08-06 07:40:03 | INFO | app.scraper.scraper:save_articles_to_db:328 | 📦 Обработан batch: сохранено 1 статей
+2025-08-06 07:40:03 | INFO | app.scraper.scraper:save_articles_to_db:328 | 📦 Обработан batch: сохранено 0 статей
+2025-08-06 07:40:03 | INFO | app.scraper.scraper:save_articles_to_db:328 | 📦 Обработан batch: сохранено 0 статей
+2025-08-06 07:40:03 | INFO | app.scraper.scraper:save_articles_to_db:338 | ✅ Итого сохранено 1 новых статей в базу данных
+2025-08-06 07:40:03 | INFO | app.scraper.scraper:run_scraping:375 | 🎉 Скрапинг завершен! Обработано: 1, сохранено: 1
+2025-08-06 07:40:03 | INFO | app.scraper.scraper:close_browser:70 | 🔴 Браузер закрыт
+2025-08-06 07:40:03 | INFO | app.scheduler.scheduler:adaptive_scrape_job:42 | ✅ Адаптивная задача скрапинга завершена
+2025-08-06 07:40:03 | INFO | app.scheduler.scheduler:start:89 | ✅ Планировщик запущен в почасовом режиме (каждый час)
+2025-08-06 07:47:44 | INFO | __main__:main:35 | 🚀 Запуск Financial Times скрапера...
+2025-08-06 07:47:44 | INFO | __main__:main:38 | 📊 Инициализация базы данных...
+2025-08-06 07:47:44 | INFO | app.db.database:init_db:50 | ✅ База данных инициализирована
+2025-08-06 07:47:44 | INFO | __main__:main:42 | ⏰ Запуск планировщика...
+2025-08-06 07:47:44 | INFO | app.scheduler.scheduler:start:49 | ⚡ Запуск планировщика задач...
+2025-08-06 07:47:44 | INFO | app.scraper.scraper:is_first_run:82 | 📊 Статей в базе: 0, первый запуск: True
+2025-08-06 07:47:44 | INFO | app.scheduler.scheduler:start:55 | 🆕 Первый запуск - начинаем сбор за 30 дней...
+2025-08-06 07:47:44 | INFO | app.scheduler.scheduler:initial_scrape_job:22 | 🔄 Запуск задачи первоначального скрапинга...
+2025-08-06 07:47:44 | INFO | app.scraper.scraper:run_initial_scraping:388 | 🔄 Принудительный сбор статей за 30 дней...
+2025-08-06 07:47:44 | INFO | app.scraper.scraper:init_browser:54 | 🌐 Браузер успешно инициализирован
+2025-08-06 07:47:44 | INFO | app.scraper.scraper:scrape_articles_with_pagination:236 | 📚 Начинаем скрапинг с пагинацией (макс. 50 страниц)...
+2025-08-06 07:47:44 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 1 (попытка 1/3): https://www.ft.com/world
+2025-08-06 07:47:50 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 26 элементов статей на странице 1
+2025-08-06 07:47:50 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:47:50 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 23 статей со страницы 1
+2025-08-06 07:47:51 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 2 (попытка 1/3): https://www.ft.com/world?page=2
+2025-08-06 07:47:55 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 2
+2025-08-06 07:47:55 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:47:55 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:47:55 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:47:55 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:47:55 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 25 статей со страницы 2
+2025-08-06 07:47:56 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 3 (попытка 1/3): https://www.ft.com/world?page=3
+2025-08-06 07:48:00 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 3
+2025-08-06 07:48:00 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:00 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:00 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:00 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:00 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 23 статей со страницы 3
+2025-08-06 07:48:01 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 4 (попытка 1/3): https://www.ft.com/world?page=4
+2025-08-06 07:48:04 | INFO | __main__:main:35 | 🚀 Запуск Financial Times скрапера...
+2025-08-06 07:48:04 | INFO | __main__:main:38 | 📊 Инициализация базы данных...
+2025-08-06 07:48:04 | INFO | app.db.database:init_db:50 | ✅ База данных инициализирована
+2025-08-06 07:48:04 | INFO | __main__:main:42 | ⏰ Запуск планировщика...
+2025-08-06 07:48:04 | INFO | app.scheduler.scheduler:start:49 | ⚡ Запуск планировщика задач...
+2025-08-06 07:48:04 | INFO | app.scraper.scraper:is_first_run:82 | 📊 Статей в базе: 0, первый запуск: True
+2025-08-06 07:48:04 | INFO | app.scheduler.scheduler:start:55 | 🆕 Первый запуск - начинаем сбор за 30 дней...
+2025-08-06 07:48:04 | INFO | app.scheduler.scheduler:initial_scrape_job:22 | 🔄 Запуск задачи первоначального скрапинга...
+2025-08-06 07:48:04 | INFO | app.scraper.scraper:run_initial_scraping:388 | 🔄 Принудительный сбор статей за 30 дней...
+2025-08-06 07:48:04 | INFO | app.scraper.scraper:init_browser:54 | 🌐 Браузер успешно инициализирован
+2025-08-06 07:48:04 | INFO | app.scraper.scraper:scrape_articles_with_pagination:236 | 📚 Начинаем скрапинг с пагинацией (макс. 50 страниц)...
+2025-08-06 07:48:04 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 1 (попытка 1/3): https://www.ft.com/world
+2025-08-06 07:48:09 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 26 элементов статей на странице 1
+2025-08-06 07:48:09 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:09 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 23 статей со страницы 1
+2025-08-06 07:48:10 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 2 (попытка 1/3): https://www.ft.com/world?page=2
+2025-08-06 07:48:14 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 2
+2025-08-06 07:48:14 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:14 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:14 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:14 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:14 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 25 статей со страницы 2
+2025-08-06 07:48:15 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 3 (попытка 1/3): https://www.ft.com/world?page=3
+2025-08-06 07:48:19 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 3
+2025-08-06 07:48:19 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:19 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:19 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:19 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:19 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 23 статей со страницы 3
+2025-08-06 07:48:20 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 4 (попытка 1/3): https://www.ft.com/world?page=4
+2025-08-06 07:48:24 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 4
+2025-08-06 07:48:24 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:24 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:24 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:24 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:24 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 22 статей со страницы 4
+2025-08-06 07:48:25 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 5 (попытка 1/3): https://www.ft.com/world?page=5
+2025-08-06 07:48:29 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 5
+2025-08-06 07:48:30 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:30 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:30 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:30 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:30 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 23 статей со страницы 5
+2025-08-06 07:48:31 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 6 (попытка 1/3): https://www.ft.com/world?page=6
+2025-08-06 07:48:35 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 6
+2025-08-06 07:48:35 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:35 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:35 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:35 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:35 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 24 статей со страницы 6
+2025-08-06 07:48:36 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 7 (попытка 1/3): https://www.ft.com/world?page=7
+2025-08-06 07:48:39 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 7
+2025-08-06 07:48:39 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:39 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:39 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:39 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:39 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 24 статей со страницы 7
+2025-08-06 07:48:40 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 8 (попытка 1/3): https://www.ft.com/world?page=8
+2025-08-06 07:48:54 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 8
+2025-08-06 07:48:54 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:54 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:54 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:54 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:54 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 24 статей со страницы 8
+2025-08-06 07:48:55 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 9 (попытка 1/3): https://www.ft.com/world?page=9
+2025-08-06 07:48:59 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 9
+2025-08-06 07:48:59 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:59 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:59 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:59 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:48:59 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 23 статей со страницы 9
+2025-08-06 07:49:00 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 10 (попытка 1/3): https://www.ft.com/world?page=10
+2025-08-06 07:49:05 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 10
+2025-08-06 07:49:05 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:05 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:05 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:05 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:05 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 20 статей со страницы 10
+2025-08-06 07:49:06 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 11 (попытка 1/3): https://www.ft.com/world?page=11
+2025-08-06 07:49:09 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 11
+2025-08-06 07:49:09 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:09 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:09 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:09 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:09 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 25 статей со страницы 11
+2025-08-06 07:49:10 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 12 (попытка 1/3): https://www.ft.com/world?page=12
+2025-08-06 07:49:15 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 12
+2025-08-06 07:49:15 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:15 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:15 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:15 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:15 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 21 статей со страницы 12
+2025-08-06 07:49:16 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 13 (попытка 1/3): https://www.ft.com/world?page=13
+2025-08-06 07:49:20 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 13
+2025-08-06 07:49:20 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:20 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:20 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:20 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:20 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 25 статей со страницы 13
+2025-08-06 07:49:21 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 14 (попытка 1/3): https://www.ft.com/world?page=14
+2025-08-06 07:49:25 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 14
+2025-08-06 07:49:25 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:25 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:25 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:25 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:25 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 24 статей со страницы 14
+2025-08-06 07:49:26 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 15 (попытка 1/3): https://www.ft.com/world?page=15
+2025-08-06 07:49:30 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 15
+2025-08-06 07:49:30 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:30 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:30 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:30 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:30 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 21 статей со страницы 15
+2025-08-06 07:49:31 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 16 (попытка 1/3): https://www.ft.com/world?page=16
+2025-08-06 07:49:36 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 16
+2025-08-06 07:49:36 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:36 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:36 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:36 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:36 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 24 статей со страницы 16
+2025-08-06 07:49:37 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 17 (попытка 1/3): https://www.ft.com/world?page=17
+2025-08-06 07:49:41 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 17
+2025-08-06 07:49:41 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:41 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:41 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:41 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:41 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 25 статей со страницы 17
+2025-08-06 07:49:42 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 18 (попытка 1/3): https://www.ft.com/world?page=18
+2025-08-06 07:49:46 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 18
+2025-08-06 07:49:46 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:46 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:46 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:46 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:46 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 22 статей со страницы 18
+2025-08-06 07:49:47 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 19 (попытка 1/3): https://www.ft.com/world?page=19
+2025-08-06 07:49:52 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 19
+2025-08-06 07:49:52 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:52 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:52 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:52 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:52 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 22 статей со страницы 19
+2025-08-06 07:49:53 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 20 (попытка 1/3): https://www.ft.com/world?page=20
+2025-08-06 07:49:57 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 20
+2025-08-06 07:49:57 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:57 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:57 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:57 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:49:57 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 24 статей со страницы 20
+2025-08-06 07:49:58 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 21 (попытка 1/3): https://www.ft.com/world?page=21
+2025-08-06 07:50:04 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 21
+2025-08-06 07:50:04 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:04 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:04 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:04 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:04 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 23 статей со страницы 21
+2025-08-06 07:50:05 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 22 (попытка 1/3): https://www.ft.com/world?page=22
+2025-08-06 07:50:09 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 22
+2025-08-06 07:50:09 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:09 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:09 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:09 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:09 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 23 статей со страницы 22
+2025-08-06 07:50:10 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 23 (попытка 1/3): https://www.ft.com/world?page=23
+2025-08-06 07:50:14 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 23
+2025-08-06 07:50:14 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:14 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:14 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:14 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:14 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 21 статей со страницы 23
+2025-08-06 07:50:15 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 24 (попытка 1/3): https://www.ft.com/world?page=24
+2025-08-06 07:50:19 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 24
+2025-08-06 07:50:19 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:19 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:19 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:19 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:19 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 24 статей со страницы 24
+2025-08-06 07:50:20 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 25 (попытка 1/3): https://www.ft.com/world?page=25
+2025-08-06 07:50:24 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 25
+2025-08-06 07:50:24 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:24 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:24 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:24 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:24 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 24 статей со страницы 25
+2025-08-06 07:50:25 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 26 (попытка 1/3): https://www.ft.com/world?page=26
+2025-08-06 07:50:29 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 26
+2025-08-06 07:50:29 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:29 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:29 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:29 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:29 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 22 статей со страницы 26
+2025-08-06 07:50:30 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 27 (попытка 1/3): https://www.ft.com/world?page=27
+2025-08-06 07:50:35 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 27
+2025-08-06 07:50:35 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:35 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:35 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:35 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:35 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 23 статей со страницы 27
+2025-08-06 07:50:36 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 28 (попытка 1/3): https://www.ft.com/world?page=28
+2025-08-06 07:50:40 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 28
+2025-08-06 07:50:40 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:40 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:40 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:40 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:40 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 22 статей со страницы 28
+2025-08-06 07:50:41 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 29 (попытка 1/3): https://www.ft.com/world?page=29
+2025-08-06 07:50:45 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 29
+2025-08-06 07:50:45 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:45 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:45 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:45 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:45 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 25 статей со страницы 29
+2025-08-06 07:50:46 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 30 (попытка 1/3): https://www.ft.com/world?page=30
+2025-08-06 07:50:50 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 30
+2025-08-06 07:50:50 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:50 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:50 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:50 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:50 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 23 статей со страницы 30
+2025-08-06 07:50:51 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 31 (попытка 1/3): https://www.ft.com/world?page=31
+2025-08-06 07:50:55 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 31
+2025-08-06 07:50:55 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:55 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:55 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:55 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:50:55 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 22 статей со страницы 31
+2025-08-06 07:50:56 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 32 (попытка 1/3): https://www.ft.com/world?page=32
+2025-08-06 07:51:01 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 32
+2025-08-06 07:51:01 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:01 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:01 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:01 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:01 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 23 статей со страницы 32
+2025-08-06 07:51:02 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 33 (попытка 1/3): https://www.ft.com/world?page=33
+2025-08-06 07:51:05 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 33
+2025-08-06 07:51:05 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:05 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:05 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:05 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:05 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 21 статей со страницы 33
+2025-08-06 07:51:06 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 34 (попытка 1/3): https://www.ft.com/world?page=34
+2025-08-06 07:51:11 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 34
+2025-08-06 07:51:11 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:11 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:11 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:11 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:11 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 24 статей со страницы 34
+2025-08-06 07:51:12 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 35 (попытка 1/3): https://www.ft.com/world?page=35
+2025-08-06 07:51:16 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 35
+2025-08-06 07:51:16 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:16 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:16 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:16 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:16 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 22 статей со страницы 35
+2025-08-06 07:51:17 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 36 (попытка 1/3): https://www.ft.com/world?page=36
+2025-08-06 07:51:21 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 36
+2025-08-06 07:51:21 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:21 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:21 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:21 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:21 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 25 статей со страницы 36
+2025-08-06 07:51:22 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 37 (попытка 1/3): https://www.ft.com/world?page=37
+2025-08-06 07:51:26 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 37
+2025-08-06 07:51:26 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:26 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:26 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:26 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:26 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 23 статей со страницы 37
+2025-08-06 07:51:27 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 38 (попытка 1/3): https://www.ft.com/world?page=38
+2025-08-06 07:51:32 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 38
+2025-08-06 07:51:32 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:32 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:32 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:32 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:32 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 21 статей со страницы 38
+2025-08-06 07:51:33 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 39 (попытка 1/3): https://www.ft.com/world?page=39
+2025-08-06 07:51:37 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 39
+2025-08-06 07:51:37 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:37 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:37 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:37 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:37 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 23 статей со страницы 39
+2025-08-06 07:51:38 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 40 (попытка 1/3): https://www.ft.com/world?page=40
+2025-08-06 07:51:42 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 40
+2025-08-06 07:51:42 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:42 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:42 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:42 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:42 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 21 статей со страницы 40
+2025-08-06 07:51:43 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 41 (попытка 1/3): https://www.ft.com/world?page=41
+2025-08-06 07:51:47 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 41
+2025-08-06 07:51:47 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:47 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:47 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:47 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:47 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 23 статей со страницы 41
+2025-08-06 07:51:48 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 42 (попытка 1/3): https://www.ft.com/world?page=42
+2025-08-06 07:51:53 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 42
+2025-08-06 07:51:53 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:53 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:53 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:53 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:53 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 24 статей со страницы 42
+2025-08-06 07:51:54 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 43 (попытка 1/3): https://www.ft.com/world?page=43
+2025-08-06 07:51:58 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 43
+2025-08-06 07:51:58 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:58 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:58 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:58 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:51:58 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 21 статей со страницы 43
+2025-08-06 07:51:59 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 44 (попытка 1/3): https://www.ft.com/world?page=44
+2025-08-06 07:52:03 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 44
+2025-08-06 07:52:03 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:03 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:03 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:03 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:03 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 23 статей со страницы 44
+2025-08-06 07:52:04 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 45 (попытка 1/3): https://www.ft.com/world?page=45
+2025-08-06 07:52:09 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 45
+2025-08-06 07:52:09 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:09 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:09 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:09 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:09 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 22 статей со страницы 45
+2025-08-06 07:52:10 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 46 (попытка 1/3): https://www.ft.com/world?page=46
+2025-08-06 07:52:14 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 46
+2025-08-06 07:52:14 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:14 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:14 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:14 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:14 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 21 статей со страницы 46
+2025-08-06 07:52:15 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 47 (попытка 1/3): https://www.ft.com/world?page=47
+2025-08-06 07:52:19 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 47
+2025-08-06 07:52:19 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:19 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:19 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:19 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:19 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 24 статей со страницы 47
+2025-08-06 07:52:20 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 48 (попытка 1/3): https://www.ft.com/world?page=48
+2025-08-06 07:52:24 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 48
+2025-08-06 07:52:24 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:24 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:24 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:24 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:24 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 20 статей со страницы 48
+2025-08-06 07:52:25 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 49 (попытка 1/3): https://www.ft.com/world?page=49
+2025-08-06 07:52:29 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 49
+2025-08-06 07:52:29 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:29 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:29 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:29 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:29 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 25 статей со страницы 49
+2025-08-06 07:52:30 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 50 (попытка 1/3): https://www.ft.com/world?page=50
+2025-08-06 07:52:35 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 50
+2025-08-06 07:52:35 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:35 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:35 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:35 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 07:52:35 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 23 статей со страницы 50
+2025-08-06 07:52:36 | INFO | app.scraper.scraper:scrape_articles_with_pagination:268 | 🎉 Завершен скрапинг с пагинацией: собрано 1145 статей с 50 страниц
+2025-08-06 07:52:39 | INFO | app.scraper.scraper:save_articles_to_db:328 | 📦 Обработан batch: сохранено 1143 статей
+2025-08-06 07:52:41 | INFO | app.scraper.scraper:save_articles_to_db:328 | 📦 Обработан batch: сохранено 0 статей
+2025-08-06 07:52:43 | INFO | app.scraper.scraper:save_articles_to_db:328 | 📦 Обработан batch: сохранено 0 статей
+2025-08-06 07:52:43 | INFO | app.scraper.scraper:save_articles_to_db:338 | ✅ Итого сохранено 1143 новых статей в базу данных
+2025-08-06 07:52:43 | INFO | app.scraper.scraper:run_initial_scraping:400 | 🎉 Принудительный сбор завершен! Обработано: 1145, сохранено: 1143
+2025-08-06 07:52:43 | INFO | app.scraper.scraper:close_browser:70 | 🔴 Браузер закрыт
+2025-08-06 07:52:43 | INFO | app.scheduler.scheduler:initial_scrape_job:24 | ✅ Задача первоначального скрапинга завершена
+2025-08-06 07:52:43 | INFO | app.scheduler.scheduler:start:60 | ⏰ Настройка почасового режима для будущих запусков...
+2025-08-06 07:52:43 | INFO | app.scheduler.scheduler:start:71 | ✅ Планировщик запущен в почасовом режиме (каждый час)

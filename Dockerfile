@@ -60,8 +60,8 @@ USER scraper
 # Установка браузеров от имени пользователя scraper
 RUN playwright install chromium
 
-# Открытие порта (если нужен API)
+# Открытие порта
 EXPOSE 8000
 
-# Команда по умолчанию
+# Команда для запуска приложения
 CMD ["python", "-m", "app.main"]
