@@ -36,15 +36,6 @@ services:
       DB_USER: scraper_user
       DB_PASSWORD: scraper_password
 
-      # Настройки скрапинга
-      SCRAPER_INTERVAL_HOURS: 1
-      INITIAL_DAYS_BACK: 30
-      MAX_CONCURRENT_REQUESTS: 5
-      REQUEST_DELAY: 2
-
-      # Настройки логирования
-      LOG_LEVEL: INFO
-
     ports:
       - "8000:8000"  # Проброс порта для FastAPI
     depends_on:
