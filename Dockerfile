@@ -6,7 +6,6 @@ RUN apt-get update && apt-get install -y \
     curl \
     gnupg \
     unzip \
-    # Зависимости для Playwright
     libnss3 \
     libnspr4 \
     libdbus-1-3 \
@@ -17,7 +16,6 @@ RUN apt-get update && apt-get install -y \
     libgtk-3-0 \
     libgbm1 \
     libasound2 \
-    # Дополнительные зависимости
     libxrandr2 \
     libxcomposite1 \
     libxss1 \
@@ -40,6 +38,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Установка Playwright браузеров (от root пользователя)
 RUN playwright install-deps chromium
 RUN playwright install chromium
+
 # Копирование кода приложения
 COPY . .
 

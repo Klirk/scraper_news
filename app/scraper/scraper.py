@@ -3,13 +3,10 @@
 """
 import asyncio
 import datetime
-import json
-import re
-from pathlib import Path
 from typing import Optional, List, Dict, Any
 from urllib.parse import urljoin
 
-from playwright.async_api import async_playwright, Page, Browser
+from playwright.async_api import async_playwright, Page, Browser, ViewportSize
 from bs4 import BeautifulSoup
 from loguru import logger
 from sqlalchemy.exc import IntegrityError
@@ -17,7 +14,6 @@ from sqlalchemy.exc import IntegrityError
 from app.db.database import get_session
 from app.models.models import Article
 from sqlalchemy import select, func
-import time
 
 
 class FTScraper:
@@ -47,7 +43,7 @@ class FTScraper:
                 )
                 context = await self.browser.new_context(
                     user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                    viewport={'width': 1920, 'height': 1080}
+                    viewport=ViewportSize(width=1920, height=1080)
                 )
                 
                 # Устанавливаем таймауты
@@ -75,7 +71,8 @@ class FTScraper:
         except Exception as e:
             logger.error(f"❌ Ошибка закрытия браузера: {e}")
 
-    async def is_first_run(self) -> bool:
+    @staticmethod
+    async def is_first_run() -> bool:
         """Проверка, является ли запуск первым (нет статей в базе)"""
         try:
             async for session in get_session():
@@ -84,26 +81,29 @@ class FTScraper:
                 is_first = count == 0
                 logger.info(f"📊 Статей в базе: {count}, первый запуск: {is_first}")
                 return is_first
+            return True
         except Exception as e:
             logger.error(f"❌ Ошибка проверки первого запуска: {e}")
             return True  # По умолчанию считаем первым запуском
 
-    def _is_article_recent(self, published_at: datetime.datetime, hours_limit: int = 1) -> bool:
+    @staticmethod
+    def _is_article_recent(published_at: datetime.datetime, hours_limit: int = 1) -> bool:
         """Проверка, является ли статья недавней (в пределах указанного количества часов)"""
         now = datetime.datetime.now(datetime.timezone.utc)
         time_limit = now - datetime.timedelta(hours=hours_limit)
         return published_at >= time_limit
 
-    def _is_article_within_days(self, published_at: datetime.datetime, days_limit: int = 30) -> bool:
+    @staticmethod
+    def _is_article_within_days(published_at: datetime.datetime, days_limit: int = 30) -> bool:
         """Проверка, является ли статья в пределах указанного количества дней"""
         now = datetime.datetime.now(datetime.timezone.utc)
         time_limit = now - datetime.timedelta(days=days_limit)
         return published_at >= time_limit
 
-    def _parse_publish_date(self, date_str: str) -> datetime.datetime:
+    @staticmethod
+    def _parse_publish_date(date_str: str) -> datetime.datetime:
         """Парсинг даты публикации из атрибута title"""
         try:
-            # Форматы: "August 5 2025 7:40 pm", "January 15 2025 2:30 am"
             date_obj = datetime.datetime.strptime(date_str, "%B %d %Y %I:%M %p")
             return date_obj.replace(tzinfo=datetime.timezone.utc)
         except ValueError:
@@ -188,7 +188,7 @@ class FTScraper:
                 # Ждем появления списка статей
                 try:
                     await self.page.wait_for_selector('ul.o-teaser-collection__list', timeout=10000)
-                except Exception:
+                except TimeoutError:
                     logger.warning(f"⚠️ Список статей не найден на странице {page_num}")
 
                 # Получаем HTML контент
@@ -237,6 +237,7 @@ class FTScraper:
             
             all_articles = []
             no_articles_count = 0
+            page_num = 0
             
             for page_num in range(1, max_pages + 1):
                 page_articles = await self.scrape_single_page(page_num, time_filter_func)
@@ -275,7 +276,8 @@ class FTScraper:
         """Скрапинг списка статей с главной страницы мира (без пагинации)"""
         return await self.scrape_single_page(1, time_filter_func)
 
-    async def save_articles_to_db(self, articles_data: List[Dict[str, Any]], max_retries: int = 3) -> int:
+    @staticmethod
+    async def save_articles_to_db(articles_data: List[Dict[str, Any]], max_retries: int = 3) -> int:
         """Сохранение статей в базу данных с обработкой ошибок"""
         saved_count = 0
         failed_count = 0

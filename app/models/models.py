@@ -1,5 +1,10 @@
+"""
+Модели базы данных для хранения статей новостей.
+Эти модели используются для хранения информации о новостных статьях
+"""
+
 from datetime import datetime
-from typing import List, Optional
+from typing import Optional
 from sqlalchemy import (
     String, Text, DateTime, UniqueConstraint
 )
@@ -7,14 +12,14 @@ from sqlalchemy.orm import (
     Mapped, mapped_column, DeclarativeBase
 )
 
-
+# SQLAlchemy ORM модели для работы с базой данных
 class Base(DeclarativeBase):
     pass
 
-
+# SQLAlchemy модель для хранения статей новостей
 class Article(Base):
     __tablename__ = "articles"
-    __table_args__ = (UniqueConstraint("url", name="uq_article_url"),)
+    __table_args__ = (UniqueConstraint("url", name="uq_article_url"),) # Уникальный индекс по URL
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
