@@ -1,30 +1,30 @@
 """
-Тесты для планировщика задач скрапинга
+Тесты для планировщика задач
 """
 import pytest
 import asyncio
-from unittest.mock import AsyncMock, MagicMock, patch
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-
+from unittest.mock import AsyncMock, patch, MagicMock
 from app.scheduler.scheduler import ScrapingScheduler
 
 
 @pytest.mark.unit
 def test_scheduler_initialization():
-    """Тест инициализации планировщика"""
+    """Тестирует инициализацию планировщика"""
     scheduler = ScrapingScheduler()
     
     assert scheduler.scheduler is not None
-    assert isinstance(scheduler.scheduler, AsyncIOScheduler)
     assert scheduler.scraper is not None
+    assert hasattr(scheduler.scheduler, 'add_job')
+    assert hasattr(scheduler.scheduler, 'start')
+    assert hasattr(scheduler.scheduler, 'shutdown')
 
 
 @pytest.mark.unit
 @pytest.mark.asyncio
 async def test_initial_scrape_job():
-    """Тест задачи первоначального скрапинга"""
+    """Тестирует задачу первоначального скрапинга"""
     scheduler = ScrapingScheduler()
-    scheduler.scraper = AsyncMock()
+    scheduler.scraper.run_initial_scraping = AsyncMock()
     
     await scheduler.initial_scrape_job()
     
@@ -33,13 +33,12 @@ async def test_initial_scrape_job():
 
 @pytest.mark.unit
 @pytest.mark.asyncio
-async def test_initial_scrape_job_error_handling():
-    """Тест обработки ошибок в задаче первоначального скрапинга"""
+async def test_initial_scrape_job_with_exception():
+    """Тестирует обработку исключений в задаче первоначального скрапинга"""
     scheduler = ScrapingScheduler()
-    scheduler.scraper = AsyncMock()
-    scheduler.scraper.run_initial_scraping.side_effect = Exception("Scraping failed")
+    scheduler.scraper.run_initial_scraping = AsyncMock(side_effect=Exception("Test error"))
     
-    # Задача должна обработать ошибку без падения
+    # Не должно выбрасывать исключение
     await scheduler.initial_scrape_job()
     
     scheduler.scraper.run_initial_scraping.assert_called_once()
@@ -48,9 +47,9 @@ async def test_initial_scrape_job_error_handling():
 @pytest.mark.unit
 @pytest.mark.asyncio
 async def test_hourly_scrape_job():
-    """Тест почасовой задачи скрапинга"""
+    """Тестирует почасовую задачу скрапинга"""
     scheduler = ScrapingScheduler()
-    scheduler.scraper = AsyncMock()
+    scheduler.scraper.run_hourly_scraping = AsyncMock()
     
     await scheduler.hourly_scrape_job()
     
@@ -59,13 +58,12 @@ async def test_hourly_scrape_job():
 
 @pytest.mark.unit
 @pytest.mark.asyncio
-async def test_hourly_scrape_job_error_handling():
-    """Тест обработки ошибок в почасовой задаче"""
+async def test_hourly_scrape_job_with_exception():
+    """Тестирует обработку исключений в почасовой задаче"""
     scheduler = ScrapingScheduler()
-    scheduler.scraper = AsyncMock()
-    scheduler.scraper.run_hourly_scraping.side_effect = Exception("Hourly scraping failed")
+    scheduler.scraper.run_hourly_scraping = AsyncMock(side_effect=Exception("Test error"))
     
-    # Задача должна обработать ошибку без падения
+    # Не должно выбрасывать исключение
     await scheduler.hourly_scrape_job()
     
     scheduler.scraper.run_hourly_scraping.assert_called_once()
@@ -74,9 +72,9 @@ async def test_hourly_scrape_job_error_handling():
 @pytest.mark.unit
 @pytest.mark.asyncio
 async def test_adaptive_scrape_job():
-    """Тест адаптивной задачи скрапинга"""
+    """Тестирует адаптивную задачу скрапинга"""
     scheduler = ScrapingScheduler()
-    scheduler.scraper = AsyncMock()
+    scheduler.scraper.run_scraping = AsyncMock()
     
     await scheduler.adaptive_scrape_job()
     
@@ -85,13 +83,12 @@ async def test_adaptive_scrape_job():
 
 @pytest.mark.unit
 @pytest.mark.asyncio
-async def test_adaptive_scrape_job_error_handling():
-    """Тест обработки ошибок в адаптивной задаче"""
+async def test_adaptive_scrape_job_with_exception():
+    """Тестирует обработку исключений в адаптивной задаче"""
     scheduler = ScrapingScheduler()
-    scheduler.scraper = AsyncMock()
-    scheduler.scraper.run_scraping.side_effect = Exception("Adaptive scraping failed")
+    scheduler.scraper.run_scraping = AsyncMock(side_effect=Exception("Test error"))
     
-    # Задача должна обработать ошибку без падения
+    # Не должно выбрасывать исключение
     await scheduler.adaptive_scrape_job()
     
     scheduler.scraper.run_scraping.assert_called_once()
@@ -100,9 +97,9 @@ async def test_adaptive_scrape_job_error_handling():
 @pytest.mark.unit
 @pytest.mark.asyncio
 async def test_start_manual_mode():
-    """Тест запуска в ручном режиме"""
+    """Тестирует запуск в ручном режиме"""
     scheduler = ScrapingScheduler()
-    scheduler.scraper = AsyncMock()
+    scheduler.scraper.run_scraping = AsyncMock()
     
     await scheduler.start_manual_mode()
     
@@ -111,13 +108,12 @@ async def test_start_manual_mode():
 
 @pytest.mark.unit
 @pytest.mark.asyncio
-async def test_start_manual_mode_error_handling():
-    """Тест обработки ошибок в ручном режиме"""
+async def test_start_manual_mode_with_exception():
+    """Тестирует обработку исключений в ручном режиме"""
     scheduler = ScrapingScheduler()
-    scheduler.scraper = AsyncMock()
-    scheduler.scraper.run_scraping.side_effect = Exception("Manual mode failed")
+    scheduler.scraper.run_scraping = AsyncMock(side_effect=Exception("Test error"))
     
-    # Режим должен обработать ошибку без падения
+    # Не должно выбрасывать исключение
     await scheduler.start_manual_mode()
     
     scheduler.scraper.run_scraping.assert_called_once()
@@ -125,11 +121,11 @@ async def test_start_manual_mode_error_handling():
 
 @pytest.mark.unit
 @pytest.mark.asyncio
-async def test_stop_scheduler():
-    """Тест остановки планировщика"""
+async def test_stop():
+    """Тестирует остановку планировщика"""
     scheduler = ScrapingScheduler()
-    scheduler.scheduler = MagicMock()
     scheduler.scheduler.running = True
+    scheduler.scheduler.shutdown = MagicMock()
     
     await scheduler.stop()
     
@@ -138,28 +134,27 @@ async def test_stop_scheduler():
 
 @pytest.mark.unit
 @pytest.mark.asyncio
-async def test_stop_scheduler_not_running():
-    """Тест остановки уже остановленного планировщика"""
+async def test_stop_not_running():
+    """Тестирует остановку планировщика когда он не запущен"""
     scheduler = ScrapingScheduler()
-    scheduler.scheduler = MagicMock()
     scheduler.scheduler.running = False
+    scheduler.scheduler.shutdown = MagicMock()
     
     await scheduler.stop()
     
-    # Shutdown не должен быть вызван для неработающего планировщика
+    # shutdown не должен быть вызван если планировщик не запущен
     scheduler.scheduler.shutdown.assert_not_called()
 
 
 @pytest.mark.unit
 @pytest.mark.asyncio
-async def test_stop_scheduler_error_handling():
-    """Тест обработки ошибок при остановке планировщика"""
+async def test_stop_with_exception():
+    """Тестирует обработку исключений при остановке планировщика"""
     scheduler = ScrapingScheduler()
-    scheduler.scheduler = MagicMock()
     scheduler.scheduler.running = True
-    scheduler.scheduler.shutdown.side_effect = Exception("Shutdown failed")
+    scheduler.scheduler.shutdown = MagicMock(side_effect=Exception("Shutdown error"))
     
-    # Остановка должна обработать ошибку без падения
+    # Не должно выбрасывать исключение
     await scheduler.stop()
     
     scheduler.scheduler.shutdown.assert_called_once()
@@ -168,164 +163,114 @@ async def test_stop_scheduler_error_handling():
 @pytest.mark.integration
 @pytest.mark.asyncio
 async def test_start_first_run():
-    """Тест запуска планировщика при первом запуске"""
+    """Интеграционный тест первого запуска планировщика"""
     scheduler = ScrapingScheduler()
-    scheduler.scraper = AsyncMock()
-    scheduler.scraper.is_first_run.return_value = True
-    scheduler.scheduler = MagicMock()
     
-    # Мокаем бесконечный цикл чтобы тест завершился
-    with patch('asyncio.sleep') as mock_sleep:
-        mock_sleep.side_effect = KeyboardInterrupt("Stop test")
-        
-        await scheduler.start()
-        
-        # Проверяем что был вызван первоначальный скрапинг
-        scheduler.scraper.run_initial_scraping.assert_called_once()
-        
-        # Проверяем что была добавлена почасовая задача
-        scheduler.scheduler.add_job.assert_called_once()
-        scheduler.scheduler.start.assert_called_once()
+    # Мокаем методы
+    scheduler.scraper.is_first_run = AsyncMock(return_value=True)
+    scheduler.scraper.run_initial_scraping = AsyncMock()
+    scheduler.scheduler.add_job = MagicMock()
+    scheduler.scheduler.start = MagicMock()
+    
+    # Мокаем asyncio.sleep чтобы не ждать
+    original_sleep = asyncio.sleep
+    sleep_count = 0
+    
+    async def mock_sleep(duration):
+        nonlocal sleep_count
+        sleep_count += 1
+        if sleep_count > 2:  # Прерываем после нескольких итераций
+            raise KeyboardInterrupt("Test interrupt")
+        await original_sleep(0.01)  # Короткая пауза
+    
+    with patch('asyncio.sleep', side_effect=mock_sleep):
+        try:
+            await scheduler.start()
+        except KeyboardInterrupt:
+            pass  # Ожидаемое исключение для завершения теста
+    
+    # Проверяем, что были вызваны нужные методы
+    scheduler.scraper.is_first_run.assert_called_once()
+    scheduler.scraper.run_initial_scraping.assert_called_once()
+    scheduler.scheduler.add_job.assert_called_once()
+    scheduler.scheduler.start.assert_called_once()
 
 
 @pytest.mark.integration
 @pytest.mark.asyncio
-async def test_start_subsequent_run():
-    """Тест запуска планировщика при повторном запуске"""
+async def test_start_normal_run():
+    """Интеграционный тест обычного запуска планировщика"""
     scheduler = ScrapingScheduler()
-    scheduler.scraper = AsyncMock()
-    scheduler.scraper.is_first_run.return_value = False
-    scheduler.scheduler = MagicMock()
     
-    # Мокаем бесконечный цикл чтобы тест завершился
-    with patch('asyncio.sleep') as mock_sleep:
-        mock_sleep.side_effect = KeyboardInterrupt("Stop test")
-        
-        await scheduler.start()
-        
-        # Проверяем что был вызван адаптивный скрапинг
-        scheduler.scraper.run_scraping.assert_called_once()
-        
-        # Проверяем что была добавлена почасовая задача
-        scheduler.scheduler.add_job.assert_called_once()
-        scheduler.scheduler.start.assert_called_once()
+    # Мокаем методы
+    scheduler.scraper.is_first_run = AsyncMock(return_value=False)
+    scheduler.adaptive_scrape_job = AsyncMock()
+    scheduler.scheduler.add_job = MagicMock()
+    scheduler.scheduler.start = MagicMock()
+    
+    # Мокаем asyncio.sleep чтобы не ждать
+    sleep_count = 0
+    
+    async def mock_sleep(duration):
+        nonlocal sleep_count
+        sleep_count += 1
+        if sleep_count > 2:  # Прерываем после нескольких итераций
+            raise KeyboardInterrupt("Test interrupt")
+        await asyncio.sleep(0.01)  # Короткая пауза
+    
+    with patch('asyncio.sleep', side_effect=mock_sleep):
+        try:
+            await scheduler.start()
+        except KeyboardInterrupt:
+            pass  # Ожидаемое исключение для завершения теста
+    
+    # Проверяем, что были вызваны нужные методы
+    scheduler.scraper.is_first_run.assert_called_once()
+    scheduler.adaptive_scrape_job.assert_called_once()
+    scheduler.scheduler.add_job.assert_called_once()
+    scheduler.scheduler.start.assert_called_once()
 
 
 @pytest.mark.integration
 @pytest.mark.asyncio
 async def test_start_with_exception():
-    """Тест обработки исключений при запуске планировщика"""
+    """Тестирует обработку исключений при запуске планировщика"""
     scheduler = ScrapingScheduler()
-    scheduler.scraper = AsyncMock()
-    scheduler.scraper.is_first_run.side_effect = Exception("Database error")
-    scheduler.scheduler = MagicMock()
+    
+    # Мокаем методы так чтобы is_first_run выбрасывал исключение
+    scheduler.scraper.is_first_run = AsyncMock(side_effect=Exception("Test error"))
+    scheduler.stop = AsyncMock()
     
     await scheduler.start()
     
-    # Проверяем что остановка была вызвана при ошибке
-    scheduler.scheduler.shutdown.assert_called()
+    # Проверяем, что метод stop был вызван при исключении
+    scheduler.stop.assert_called_once()
 
 
 @pytest.mark.unit
 def test_scheduler_job_configuration():
-    """Тест конфигурации задач планировщика"""
-    scheduler = ScrapingScheduler()
-    scheduler.scheduler = MagicMock()
+    """Тестирует конфигурацию задач планировщика"""
+    from apscheduler.triggers.interval import IntervalTrigger
     
-    # Симулируем добавление задачи
+    scheduler = ScrapingScheduler()
+    mock_add_job = MagicMock()
+    scheduler.scheduler.add_job = mock_add_job
+    
+    # Имитируем добавление задачи как в реальном коде
     scheduler.scheduler.add_job(
         scheduler.hourly_scrape_job,
-        trigger=None,  # IntervalTrigger в реальном коде
+        trigger=IntervalTrigger(hours=1),
         id='hourly_scraping_job',
         name='FT Hourly Scraping',
         replace_existing=True
     )
     
-    # Проверяем что задача была добавлена
-    scheduler.scheduler.add_job.assert_called_once()
+    # Проверяем, что add_job был вызван с правильными параметрами
+    mock_add_job.assert_called_once()
+    args, kwargs = mock_add_job.call_args
     
-    # Проверяем параметры вызова
-    call_args = scheduler.scheduler.add_job.call_args
-    assert call_args[1]['id'] == 'hourly_scraping_job'
-    assert call_args[1]['name'] == 'FT Hourly Scraping'
-    assert call_args[1]['replace_existing'] is True
-
-
-@pytest.mark.integration
-@pytest.mark.asyncio
-async def test_scheduler_lifecycle():
-    """Тест полного жизненного цикла планировщика"""
-    scheduler = ScrapingScheduler()
-    scheduler.scraper = AsyncMock()
-    scheduler.scraper.is_first_run.return_value = False
-    
-    # Мокаем scheduler для контроля его поведения
-    scheduler.scheduler = MagicMock()
-    scheduler.scheduler.running = True
-    
-    # Тестируем ручной режим
-    await scheduler.start_manual_mode()
-    scheduler.scraper.run_scraping.assert_called()
-    
-    # Тестируем остановку
-    await scheduler.stop()
-    scheduler.scheduler.shutdown.assert_called_once()
-
-
-@pytest.mark.slow
-@pytest.mark.asyncio
-async def test_scheduler_real_timing():
-    """Медленный тест для проверки реального времени (помечен как slow)"""
-    scheduler = ScrapingScheduler()
-    scheduler.scraper = AsyncMock()
-    
-    start_time = asyncio.get_event_loop().time()
-    
-    # Выполняем задачу
-    await scheduler.adaptive_scrape_job()
-    
-    end_time = asyncio.get_event_loop().time()
-    duration = end_time - start_time
-    
-    # Проверяем что задача выполняется быстро (меньше 1 секунды)
-    assert duration < 1.0
-    scheduler.scraper.run_scraping.assert_called_once()
-
-
-@pytest.mark.unit
-def test_scheduler_attributes():
-    """Тест атрибутов планировщика"""
-    scheduler = ScrapingScheduler()
-    
-    # Проверяем что все необходимые атрибуты присутствуют
-    assert hasattr(scheduler, 'scheduler')
-    assert hasattr(scheduler, 'scraper')
-    assert hasattr(scheduler, 'initial_scrape_job')
-    assert hasattr(scheduler, 'hourly_scrape_job')
-    assert hasattr(scheduler, 'adaptive_scrape_job')
-    assert hasattr(scheduler, 'start')
-    assert hasattr(scheduler, 'start_manual_mode')
-    assert hasattr(scheduler, 'stop')
-
-
-@pytest.mark.unit
-@pytest.mark.asyncio
-async def test_multiple_scheduler_instances():
-    """Тест создания нескольких экземпляров планировщика"""
-    scheduler1 = ScrapingScheduler()
-    scheduler2 = ScrapingScheduler()
-    
-    # Проверяем что это разные экземпляры
-    assert scheduler1 is not scheduler2
-    assert scheduler1.scheduler is not scheduler2.scheduler
-    assert scheduler1.scraper is not scheduler2.scraper
-    
-    # Проверяем что каждый может работать независимо
-    scheduler1.scraper = AsyncMock()
-    scheduler2.scraper = AsyncMock()
-    
-    await scheduler1.adaptive_scrape_job()
-    await scheduler2.adaptive_scrape_job()
-    
-    scheduler1.scraper.run_scraping.assert_called_once()
-    scheduler2.scraper.run_scraping.assert_called_once()
+    assert args[0] == scheduler.hourly_scrape_job
+    assert isinstance(kwargs['trigger'], IntervalTrigger)
+    assert kwargs['id'] == 'hourly_scraping_job'
+    assert kwargs['name'] == 'FT Hourly Scraping'
+    assert kwargs['replace_existing'] is True

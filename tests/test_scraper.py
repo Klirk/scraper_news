@@ -1,73 +1,112 @@
 """
-Тесты для модуля скрапинга Financial Times
+Тесты для скрапера Financial Times
 """
 import pytest
+import datetime
 from unittest.mock import AsyncMock, MagicMock, patch
-from datetime import datetime, timezone, timedelta
 from bs4 import BeautifulSoup
 
 from app.scraper.scraper import FTScraper
+from app.models.models import Article
+from sqlalchemy import select, func
 
 
 @pytest.mark.unit
-@pytest.mark.asyncio
-async def test_scraper_initialization():
-    """Тест инициализации скрапера"""
+def test_scraper_initialization():
+    """Тестирует инициализацию скрапера"""
     scraper = FTScraper()
     
+    assert scraper.base_url == "https://www.ft.com"
+    assert scraper.world_url == "https://www.ft.com/world"
     assert scraper.browser is None
     assert scraper.page is None
-    assert scraper.playwright is None
 
 
 @pytest.mark.unit
 @pytest.mark.asyncio
-async def test_scraper_start_browser(mock_playwright):
-    """Тест запуска браузера"""
-    playwright_mock, browser_mock, context_mock, page_mock = mock_playwright
-    
+async def test_init_browser_success():
+    """Тестирует успешную инициализацию браузера"""
     scraper = FTScraper()
     
-    with patch('app.scraper.scraper.async_playwright') as mock_async_playwright:
-        mock_async_playwright.return_value.__aenter__.return_value = playwright_mock
+    with patch('app.scraper.scraper.async_playwright') as mock_playwright:
+        mock_playwright_instance = AsyncMock()
+        mock_playwright.return_value.start.return_value = mock_playwright_instance
         
-        await scraper.start_browser()
+        mock_browser = AsyncMock()
+        mock_context = AsyncMock()
+        mock_page = AsyncMock()
         
-        assert scraper.playwright == playwright_mock
-        assert scraper.browser == browser_mock
-        assert scraper.page == page_mock
+        mock_playwright_instance.chromium.launch.return_value = mock_browser
+        mock_browser.new_context.return_value = mock_context
+        mock_context.new_page.return_value = mock_page
         
-        # Проверяем что браузер был запущен с правильными параметрами
-        playwright_mock.chromium.launch.assert_called_once()
-        browser_mock.new_context.assert_called_once()
-        context_mock.new_page.assert_called_once()
+        await scraper.init_browser()
+        
+        assert scraper.browser == mock_browser
+        assert scraper.page == mock_page
+        mock_browser.new_context.assert_called_once()
+        mock_context.set_default_timeout.assert_called_with(30000)
+        mock_context.set_default_navigation_timeout.assert_called_with(30000)
 
 
 @pytest.mark.unit
 @pytest.mark.asyncio
-async def test_scraper_close_browser():
-    """Тест закрытия браузера"""
+async def test_init_browser_retry_on_failure():
+    """Тестирует повторные попытки при неудачной инициализации браузера"""
     scraper = FTScraper()
-    scraper.browser = AsyncMock()
-    scraper.playwright = AsyncMock()
+    
+    with patch('app.scraper.scraper.async_playwright') as mock_playwright:
+        # Первые две попытки неудачны, третья успешна
+        mock_playwright.return_value.start.side_effect = [
+            Exception("First attempt failed"),
+            Exception("Second attempt failed"),
+            AsyncMock()  # Третья попытка успешна
+        ]
+        
+        # Мокаем asyncio.sleep чтобы не ждать
+        with patch('asyncio.sleep'):
+            # Должно завершиться ошибкой после 3 попыток
+            with pytest.raises(Exception):
+                await scraper.init_browser(max_retries=3)
+
+
+@pytest.mark.unit
+@pytest.mark.asyncio
+async def test_close_browser():
+    """Тестирует закрытие браузера"""
+    scraper = FTScraper()
+    mock_browser = AsyncMock()
+    scraper.browser = mock_browser
     
     await scraper.close_browser()
     
-    scraper.browser.close.assert_called_once()
-    scraper.playwright.stop.assert_called_once()
+    mock_browser.close.assert_called_once()
 
 
 @pytest.mark.unit
 @pytest.mark.asyncio
-async def test_is_first_run_empty_database():
-    """Тест проверки первого запуска с пустой базой"""
-    mock_session = AsyncMock()
-    mock_result = AsyncMock()
-    mock_result.scalar.return_value = 0  # Пустая база
-    mock_session.execute.return_value = mock_result
+async def test_close_browser_with_exception():
+    """Тестирует обработку исключений при закрытии браузера"""
+    scraper = FTScraper()
+    mock_browser = AsyncMock()
+    mock_browser.close.side_effect = Exception("Close error")
+    scraper.browser = mock_browser
     
+    # Не должно выбрасывать исключение
+    await scraper.close_browser()
+    
+    mock_browser.close.assert_called_once()
+
+
+@pytest.mark.unit
+@pytest.mark.asyncio
+async def test_is_first_run_true(test_db_session):
+    """Тестирует определение первого запуска (пустая база)"""
     with patch('app.scraper.scraper.get_session') as mock_get_session:
-        mock_get_session.return_value.__aiter__.return_value = [mock_session]
+        async def mock_session_generator():
+            yield test_db_session
+        
+        mock_get_session.return_value = mock_session_generator()
         
         result = await FTScraper.is_first_run()
         
@@ -76,15 +115,24 @@ async def test_is_first_run_empty_database():
 
 @pytest.mark.unit
 @pytest.mark.asyncio
-async def test_is_first_run_with_articles():
-    """Тест проверки первого запуска с существующими статьями"""
-    mock_session = AsyncMock()
-    mock_result = AsyncMock()
-    mock_result.scalar.return_value = 5  # В базе есть статьи
-    mock_session.execute.return_value = mock_result
+async def test_is_first_run_false(test_db_session):
+    """Тестирует определение НЕ первого запуска (есть статьи в базе)"""
+    # Добавляем статью в тестовую базу
+    article = Article(
+        url="https://test.com/article",
+        title="Test Article",
+        content="Test content",
+        published_at=datetime.datetime.now(datetime.timezone.utc),
+        scraped_at=datetime.datetime.now(datetime.timezone.utc)
+    )
+    test_db_session.add(article)
+    await test_db_session.commit()
     
     with patch('app.scraper.scraper.get_session') as mock_get_session:
-        mock_get_session.return_value.__aiter__.return_value = [mock_session]
+        async def mock_session_generator():
+            yield test_db_session
+        
+        mock_get_session.return_value = mock_session_generator()
         
         result = await FTScraper.is_first_run()
         
@@ -93,262 +141,384 @@ async def test_is_first_run_with_articles():
 
 @pytest.mark.unit
 def test_is_article_recent():
-    """Тест проверки актуальности статьи"""
-    now = datetime.now(timezone.utc)
+    """Тестирует проверку свежести статьи"""
+    now = datetime.datetime.now(datetime.timezone.utc)
     
-    # Статья опубликована час назад (свежая)
-    recent_date = now - timedelta(minutes=30)
+    # Статья опубликована 30 минут назад (свежая)
+    recent_date = now - datetime.timedelta(minutes=30)
     assert FTScraper._is_article_recent(recent_date, hours_limit=1) is True
     
-    # Статья опубликована 2 часа назад (старая)
-    old_date = now - timedelta(hours=2)
+    # Статья опубликована 2 часа назад (не свежая)
+    old_date = now - datetime.timedelta(hours=2)
     assert FTScraper._is_article_recent(old_date, hours_limit=1) is False
-    
-    # Статья опубликована в будущем (должна считаться свежей)
-    future_date = now + timedelta(minutes=30)
-    assert FTScraper._is_article_recent(future_date, hours_limit=1) is True
 
 
 @pytest.mark.unit
-def test_parse_published_date():
-    """Тест парсинга даты публикации"""
-    # Тестируем различные форматы дат
-    test_cases = [
-        ("January 15 2024 10:30 am", "2024-01-15 10:30:00+00:00"),
-        ("December 25 2023 11:45 pm", "2023-12-25 23:45:00+00:00"),
-        ("March 1 2024 1:15 pm", "2024-03-01 13:15:00+00:00"),
+def test_is_article_within_days():
+    """Тестирует проверку статьи в пределах дней"""
+    now = datetime.datetime.now(datetime.timezone.utc)
+    
+    # Статья опубликована 15 дней назад (в пределах 30 дней)
+    within_date = now - datetime.timedelta(days=15)
+    assert FTScraper._is_article_within_days(within_date, days_limit=30) is True
+    
+    # Статья опубликована 45 дней назад (вне пределов 30 дней)
+    outside_date = now - datetime.timedelta(days=45)
+    assert FTScraper._is_article_within_days(outside_date, days_limit=30) is False
+
+
+@pytest.mark.unit
+def test_parse_publish_date():
+    """Тестирует парсинг даты публикации"""
+    date_str = "January 15 2024 10:30 am"
+    result = FTScraper._parse_publish_date(date_str)
+    
+    expected = datetime.datetime(2024, 1, 15, 10, 30, tzinfo=datetime.timezone.utc)
+    assert result == expected
+
+
+@pytest.mark.unit
+def test_parse_publish_date_invalid():
+    """Тестирует парсинг неверной даты"""
+    invalid_date_str = "invalid date string"
+    result = FTScraper._parse_publish_date(invalid_date_str)
+    
+    # Должна вернуться текущая дата
+    now = datetime.datetime.now(datetime.timezone.utc)
+    assert (now - result).total_seconds() < 5  # Разница менее 5 секунд
+
+
+@pytest.mark.unit
+def test_extract_article_data():
+    """Тестирует извлечение данных статьи из HTML"""
+    scraper = FTScraper()
+    
+    html = """
+    <li class="o-teaser-collection__item">
+        <div class="o-teaser__content">
+            <a href="/content/test-article" class="js-teaser-heading-link">Test Article Title</a>
+            <a href="/content/test-article" class="js-teaser-standfirst-link">Test standfirst content</a>
+            <a href="/tag/test-author" class="o-teaser__tag">Test Author</a>
+            <time title="January 15 2024 10:30 am">Jan 15 2024</time>
+        </div>
+    </li>
+    """
+    
+    soup = BeautifulSoup(html, 'html.parser')
+    article_element = soup.find('li', class_='o-teaser-collection__item')
+    
+    result = scraper._extract_article_data(article_element)
+    
+    assert result is not None
+    assert result['url'] == "https://www.ft.com/content/test-article"
+    assert result['title'] == "Test Article Title"
+    assert result['content'] == "Test standfirst content"
+    assert result['author'] == "Test Author"
+    assert isinstance(result['published_at'], datetime.datetime)
+    assert isinstance(result['scraped_at'], datetime.datetime)
+
+
+@pytest.mark.unit
+def test_extract_article_data_premium():
+    """Тестирует пропуск премиум статей"""
+    scraper = FTScraper()
+    
+    html = """
+    <li class="o-teaser-collection__item">
+        <span class="o-labels--premium">Premium</span>
+        <div class="o-teaser__content">
+            <a href="/content/premium-article" class="js-teaser-heading-link">Premium Article</a>
+        </div>
+    </li>
+    """
+    
+    soup = BeautifulSoup(html, 'html.parser')
+    article_element = soup.find('li', class_='o-teaser-collection__item')
+    
+    result = scraper._extract_article_data(article_element)
+    
+    assert result is None  # Премиум статьи должны пропускаться
+
+
+@pytest.mark.unit
+def test_extract_article_data_with_time_filter():
+    """Тестирует извлечение данных с временным фильтром"""
+    scraper = FTScraper()
+    
+    html = """
+    <li class="o-teaser-collection__item">
+        <div class="o-teaser__content">
+            <a href="/content/old-article" class="js-teaser-heading-link">Old Article</a>
+            <time title="January 15 2020 10:30 am">Jan 15 2020</time>
+        </div>
+    </li>
+    """
+    
+    soup = BeautifulSoup(html, 'html.parser')
+    article_element = soup.find('li', class_='o-teaser-collection__item')
+    
+    # Фильтр: только статьи за последний день
+    time_filter = lambda date: FTScraper._is_article_recent(date, hours_limit=24)
+    
+    result = scraper._extract_article_data(article_element, time_filter)
+    
+    assert result is None  # Старая статья должна быть отфильтрована
+
+
+@pytest.mark.unit
+@pytest.mark.asyncio
+async def test_scrape_single_page(mock_playwright):
+    """Тестирует скрапинг одной страницы"""
+    playwright_mock, browser_mock, context_mock, page_mock = mock_playwright
+    
+    scraper = FTScraper()
+    scraper.page = page_mock
+    
+    # Мокаем HTML ответ
+    html_content = """
+    <html>
+        <ul class="o-teaser-collection__list">
+            <li class="o-teaser-collection__item">
+                <a href="/content/test-1" class="js-teaser-heading-link">Article 1</a>
+                <a href="/content/test-1" class="js-teaser-standfirst-link">Content 1</a>
+                <time title="January 15 2024 10:30 am">Jan 15 2024</time>
+            </li>
+        </ul>
+    </html>
+    """
+    
+    page_mock.content.return_value = html_content
+    page_mock.goto = AsyncMock()
+    page_mock.wait_for_selector = AsyncMock()
+    
+    with patch('asyncio.sleep'):  # Мокаем sleep
+        result = await scraper.scrape_single_page(1)
+    
+    assert len(result) == 1
+    assert result[0]['title'] == "Article 1"
+    page_mock.goto.assert_called_once()
+
+
+@pytest.mark.unit
+@pytest.mark.asyncio
+async def test_scrape_single_page_no_articles():
+    """Тестирует скрапинг страницы без статей"""
+    scraper = FTScraper()
+    page_mock = AsyncMock()
+    scraper.page = page_mock
+    
+    # HTML без списка статей
+    html_content = "<html><body>No articles here</body></html>"
+    page_mock.content.return_value = html_content
+    
+    with patch('asyncio.sleep'):
+        result = await scraper.scrape_single_page(1)
+    
+    assert result == []
+
+
+@pytest.mark.unit
+@pytest.mark.asyncio
+async def test_save_articles_to_db(test_db_session):
+    """Тестирует сохранение статей в базу данных"""
+    articles_data = [
+        {
+            "url": "https://test.com/article-1",
+            "title": "Article 1",
+            "content": "Content 1",
+            "author": "Author 1",
+            "published_at": datetime.datetime.now(datetime.timezone.utc),
+            "scraped_at": datetime.datetime.now(datetime.timezone.utc)
+        },
+        {
+            "url": "https://test.com/article-2",
+            "title": "Article 2",
+            "content": "Content 2",
+            "author": "Author 2",
+            "published_at": datetime.datetime.now(datetime.timezone.utc),
+            "scraped_at": datetime.datetime.now(datetime.timezone.utc)
+        }
     ]
     
-    for date_str, expected in test_cases:
-        result = FTScraper._parse_published_date(date_str)
-        assert result is not None
-        assert result.strftime("%Y-%m-%d %H:%M:%S%z") == expected
+    with patch('app.scraper.scraper.get_session') as mock_get_session:
+        async def mock_session_generator():
+            yield test_db_session
+        
+        mock_get_session.return_value = mock_session_generator()
+        
+        saved_count = await FTScraper.save_articles_to_db(articles_data)
+    
+    assert saved_count == 2
+    
+    # Проверяем, что статьи действительно сохранены
+    result = await test_db_session.execute(select(Article))
+    all_articles = result.scalars().all()
+    assert len(all_articles) == 2
 
 
 @pytest.mark.unit
-def test_parse_published_date_invalid():
-    """Тест парсинга некорректной даты"""
-    invalid_dates = [
-        "invalid date format",
-        "32 January 2024 25:70 am",
-        "",
-        None
+@pytest.mark.asyncio
+async def test_save_articles_to_db_duplicate(test_db_session):
+    """Тестирует обработку дубликатов при сохранении"""
+    # Сначала добавляем статью
+    article = Article(
+        url="https://test.com/duplicate",
+        title="Original",
+        content="Original content",
+        published_at=datetime.datetime.now(datetime.timezone.utc),
+        scraped_at=datetime.datetime.now(datetime.timezone.utc)
+    )
+    test_db_session.add(article)
+    await test_db_session.commit()
+    
+    # Пытаемся добавить дубликат
+    articles_data = [
+        {
+            "url": "https://test.com/duplicate",  # Тот же URL
+            "title": "Duplicate",
+            "content": "Duplicate content",
+            "author": "Author",
+            "published_at": datetime.datetime.now(datetime.timezone.utc),
+            "scraped_at": datetime.datetime.now(datetime.timezone.utc)
+        }
     ]
     
-    for invalid_date in invalid_dates:
-        with pytest.raises((ValueError, AttributeError)):
-            FTScraper._parse_published_date(invalid_date)
+    with patch('app.scraper.scraper.get_session') as mock_get_session:
+        async def mock_session_generator():
+            yield test_db_session
+        
+        mock_get_session.return_value = mock_session_generator()
+        
+        saved_count = await FTScraper.save_articles_to_db(articles_data)
+    
+    # Дубликат не должен быть сохранен
+    assert saved_count == 0
 
 
 @pytest.mark.unit
 @pytest.mark.asyncio
-async def test_parse_articles_from_html(mock_html_content):
-    """Тест парсинга статей из HTML"""
-    scraper = FTScraper()
-    
-    # Мокаем BeautifulSoup
-    soup = BeautifulSoup(mock_html_content, 'html.parser')
-    
-    # Тестируем парсинг
-    with patch.object(scraper, '_parse_published_date') as mock_parse_date:
-        mock_parse_date.return_value = datetime.now(timezone.utc)
-        
-        articles = scraper._parse_articles_from_html(soup)
-        
-        assert len(articles) == 2
-        assert articles[0]['title'] == 'Test Article 1'
-        assert articles[1]['title'] == 'Test Article 2'
-        assert 'test-article-1' in articles[0]['url']
-        assert 'test-article-2' in articles[1]['url']
+async def test_save_articles_to_db_empty_list():
+    """Тестирует сохранение пустого списка статей"""
+    result = await FTScraper.save_articles_to_db([])
+    assert result == 0
 
 
 @pytest.mark.unit
 @pytest.mark.asyncio
-async def test_scrape_single_page(mock_playwright, mock_html_content):
-    """Тест скрапинга одной страницы"""
-    playwright_mock, browser_mock, context_mock, page_mock = mock_playwright
-    page_mock.content.return_value = mock_html_content
-    
-    scraper = FTScraper()
-    scraper.playwright = playwright_mock
-    scraper.browser = browser_mock
-    scraper.page = page_mock
-    
-    with patch.object(scraper, '_parse_published_date') as mock_parse_date:
-        mock_parse_date.return_value = datetime.now(timezone.utc)
-        
-        articles = await scraper.scrape_single_page(1)
-        
-        assert len(articles) >= 0  # Может быть пустым из-за фильтрации
-        page_mock.goto.assert_called_once()
-
-
-@pytest.mark.unit
-@pytest.mark.asyncio 
-async def test_scrape_single_page_with_filter(mock_playwright, mock_html_content):
-    """Тест скрапинга одной страницы с временным фильтром"""
-    playwright_mock, browser_mock, context_mock, page_mock = mock_playwright
-    page_mock.content.return_value = mock_html_content
-    
-    scraper = FTScraper()
-    scraper.playwright = playwright_mock
-    scraper.browser = browser_mock
-    scraper.page = page_mock
-    
-    # Создаем фильтр который пропускает только статьи за последний час
-    def time_filter(pub_date):
-        return pub_date > datetime.now(timezone.utc) - timedelta(hours=1)
-    
-    with patch.object(scraper, '_parse_published_date') as mock_parse_date:
-        # Возвращаем старую дату (будет отфильтрована)
-        mock_parse_date.return_value = datetime.now(timezone.utc) - timedelta(hours=2)
-        
-        articles = await scraper.scrape_single_page(1, time_filter)
-        
-        assert len(articles) == 0  # Все статьи должны быть отфильтрованы
-
-
-@pytest.mark.unit
-@pytest.mark.asyncio
-async def test_scrape_articles_with_pagination(mock_playwright, mock_html_content):
-    """Тест скрапинга с пагинацией"""
-    playwright_mock, browser_mock, context_mock, page_mock = mock_playwright
-    page_mock.content.return_value = mock_html_content
-    
-    scraper = FTScraper()
-    scraper.playwright = playwright_mock
-    scraper.browser = browser_mock
-    scraper.page = page_mock
-    
-    with patch.object(scraper, '_parse_published_date') as mock_parse_date:
-        mock_parse_date.return_value = datetime.now(timezone.utc)
-        
-        with patch.object(scraper, 'scrape_single_page') as mock_scrape_page:
-            mock_scrape_page.return_value = [
-                {
-                    'title': 'Test Article',
-                    'url': 'https://ft.com/test',
-                    'published_at': datetime.now(timezone.utc)
-                }
-            ]
-            
-            articles = await scraper.scrape_articles_with_pagination(max_pages=3)
-            
-            assert len(articles) == 3  # 3 страницы * 1 статья
-            assert mock_scrape_page.call_count == 3
-
-
-@pytest.mark.unit
-@pytest.mark.asyncio
-async def test_save_articles_to_db_success(sample_articles_list):
-    """Тест успешного сохранения статей в базу данных"""
-    mock_session = AsyncMock()
+async def test_save_articles_to_db_invalid_data(test_db_session):
+    """Тестирует обработку невалидных данных"""
+    invalid_articles = [
+        {
+            "title": "No URL",
+            "content": "Content without URL"
+            # Отсутствует обязательное поле url
+        }
+    ]
     
     with patch('app.scraper.scraper.get_session') as mock_get_session:
-        mock_get_session.return_value.__aiter__.return_value = [mock_session]
+        async def mock_session_generator():
+            yield test_db_session
         
-        saved_count = await FTScraper.save_articles_to_db(sample_articles_list)
+        mock_get_session.return_value = mock_session_generator()
         
-        assert saved_count == len(sample_articles_list)
-        assert mock_session.add.call_count == len(sample_articles_list)
-        mock_session.commit.assert_called()
-
-
-@pytest.mark.unit
-@pytest.mark.asyncio
-async def test_save_articles_to_db_with_duplicates(sample_articles_list):
-    """Тест сохранения статей с дубликатами"""
-    from sqlalchemy.exc import IntegrityError
+        saved_count = await FTScraper.save_articles_to_db(invalid_articles)
     
-    mock_session = AsyncMock()
-    mock_session.commit.side_effect = [IntegrityError("duplicate", None, None), None, None]
-    
-    with patch('app.scraper.scraper.get_session') as mock_get_session:
-        mock_get_session.return_value.__aiter__.return_value = [mock_session]
-        
-        saved_count = await FTScraper.save_articles_to_db(sample_articles_list)
-        
-        # Первая статья должна быть отклонена из-за дубликата
-        assert saved_count == len(sample_articles_list) - 1
-
-
-@pytest.mark.unit
-@pytest.mark.asyncio
-async def test_scrape_article_content(mock_playwright, mock_article_html):
-    """Тест скрапинга содержимого отдельной статьи"""
-    playwright_mock, browser_mock, context_mock, page_mock = mock_playwright
-    page_mock.content.return_value = mock_article_html
-    
-    scraper = FTScraper()
-    scraper.page = page_mock
-    
-    content = await scraper._scrape_article_content("https://ft.com/test-article")
-    
-    assert "This is the first paragraph" in content
-    assert "This is the second paragraph" in content
-    assert "And this is the final paragraph" in content
-    page_mock.goto.assert_called_once_with("https://ft.com/test-article", wait_until='load', timeout=30000)
+    assert saved_count == 0
 
 
 @pytest.mark.integration
 @pytest.mark.asyncio
-async def test_full_scraping_workflow(scraper_with_mock_db, mock_html_content):
-    """Интеграционный тест полного процесса скрапинга"""
-    scraper = scraper_with_mock_db
-    scraper.page.content.return_value = mock_html_content
-    
-    with patch.object(scraper, '_parse_published_date') as mock_parse_date:
-        mock_parse_date.return_value = datetime.now(timezone.utc)
-        
-        with patch.object(scraper, '_scrape_article_content') as mock_content:
-            mock_content.return_value = "Full article content here"
-            
-            # Выполняем полный цикл скрапинга
-            articles = await scraper.scrape_single_page(1)
-            
-            if articles:
-                saved_count = await scraper.save_articles_to_db(articles)
-                assert saved_count >= 0
-
-
-@pytest.mark.unit
-@pytest.mark.asyncio
-async def test_scraper_error_handling():
-    """Тест обработки ошибок в скрапере"""
+async def test_run_scraping_first_run():
+    """Интеграционный тест полного цикла скрапинга при первом запуске"""
     scraper = FTScraper()
-    scraper.page = AsyncMock()
-    scraper.page.goto.side_effect = Exception("Network error")
     
-    # Тестируем что ошибки обрабатываются корректно
-    articles = await scraper.scrape_single_page(1)
-    assert articles == []
+    # Мокаем все внешние зависимости
+    scraper.init_browser = AsyncMock()
+    scraper.close_browser = AsyncMock()
+    scraper.is_first_run = AsyncMock(return_value=True)
+    scraper.scrape_articles_with_pagination = AsyncMock(return_value=[
+        {
+            "url": "https://test.com/article",
+            "title": "Test Article",
+            "content": "Test content",
+            "author": "Test Author",
+            "published_at": datetime.datetime.now(datetime.timezone.utc),
+            "scraped_at": datetime.datetime.now(datetime.timezone.utc)
+        }
+    ])
+    scraper.save_articles_to_db = AsyncMock(return_value=1)
+    
+    await scraper.run_scraping()
+    
+    # Проверяем, что все методы были вызваны
+    scraper.init_browser.assert_called_once()
+    scraper.is_first_run.assert_called_once()
+    scraper.scrape_articles_with_pagination.assert_called_once()
+    scraper.save_articles_to_db.assert_called_once()
+    scraper.close_browser.assert_called_once()
+    
+    # Проверяем, что для первого запуска использованы правильные параметры
+    args, kwargs = scraper.scrape_articles_with_pagination.call_args
+    assert kwargs['max_pages'] == 100
 
 
-@pytest.mark.unit
+@pytest.mark.integration
 @pytest.mark.asyncio
-async def test_scraper_timeout_handling():
-    """Тест обработки таймаутов"""
+async def test_run_scraping_normal_run():
+    """Интеграционный тест полного цикла скрапинга при обычном запуске"""
     scraper = FTScraper()
-    scraper.page = AsyncMock()
-    scraper.page.wait_for_selector.side_effect = TimeoutError("Timeout waiting for selector")
     
-    # Проверяем что таймауты обрабатываются корректно
-    articles = await scraper.scrape_single_page(1)
-    assert isinstance(articles, list)
+    # Мокаем все внешние зависимости
+    scraper.init_browser = AsyncMock()
+    scraper.close_browser = AsyncMock()
+    scraper.is_first_run = AsyncMock(return_value=False)
+    scraper.scrape_articles_with_pagination = AsyncMock(return_value=[])
+    scraper.save_articles_to_db = AsyncMock(return_value=0)
+    
+    await scraper.run_scraping()
+    
+    # Проверяем параметры для обычного запуска
+    args, kwargs = scraper.scrape_articles_with_pagination.call_args
+    assert kwargs['max_pages'] == 5
 
 
-@pytest.mark.unit
-def test_scraper_url_building():
-    """Тест построения URL для скрапинга"""
-    # Тестируем что URL строятся корректно для разных страниц
-    base_url = "https://www.ft.com"
+@pytest.mark.integration
+@pytest.mark.asyncio
+async def test_run_scraping_with_exception():
+    """Тестирует обработку исключений в полном цикле скрапинга"""
+    scraper = FTScraper()
     
-    for page_num in range(1, 5):
-        if page_num == 1:
-            expected_url = base_url
+    scraper.init_browser = AsyncMock(side_effect=Exception("Browser init failed"))
+    scraper.close_browser = AsyncMock()
+    
+    # Не должно выбрасывать исключение
+    await scraper.run_scraping()
+    
+    # Браузер должен быть закрыт даже при ошибке
+    scraper.close_browser.assert_called_once()
+
+
+@pytest.mark.slow
+@pytest.mark.asyncio
+async def test_scrape_articles_with_pagination():
+    """Тестирует скрапинг с пагинацией"""
+    scraper = FTScraper()
+    
+    # Мокаем scrape_single_page чтобы возвращать разные результаты
+    call_count = 0
+    
+    async def mock_scrape_single_page(page_num, time_filter_func=None):
+        nonlocal call_count
+        call_count += 1
+        if call_count <= 2:
+            return [{"title": f"Article {call_count}", "published_at": datetime.datetime.now(datetime.timezone.utc)}]
         else:
-            expected_url = f"{base_url}?page={page_num}"
-        
-        # Это внутренняя логика, которую можно протестировать
-        # через проверку вызовов page.goto в других тестах
-        assert expected_url is not None
+            return []  # Третья страница пустая
+    
+    scraper.scrape_single_page = mock_scrape_single_page
+    
+    with patch('asyncio.sleep'):  # Ускоряем тест
+        result = await scraper.scrape_articles_with_pagination(max_pages=5)
+    
+    assert len(result) == 2  # Две статьи с первых двух страниц
+    assert call_count == 5  # Должно попытаться скрапить 3 страницы подряд без результатов

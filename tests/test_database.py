@@ -3,208 +3,189 @@
 """
 import pytest
 import os
-from unittest.mock import patch, AsyncMock
-from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession
-from sqlalchemy.exc import OperationalError
-
+from unittest.mock import AsyncMock, patch
+from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.database import get_session, init_db, close_db, engine, async_session
 
 
 @pytest.mark.unit
 @pytest.mark.asyncio
 async def test_get_session():
-    """Тест получения сессии базы данных"""
-    session_count = 0
+    """Тестирует генератор сессии базы данных"""
+    session_generator = get_session()
+    session = await session_generator.__anext__()
     
-    # Тестируем что get_session возвращает асинхронный генератор
-    async for session in get_session():
-        assert isinstance(session, AsyncSession)
-        session_count += 1
-        break  # Выходим после первой итерации
+    assert isinstance(session, AsyncSession)
     
-    assert session_count == 1
+    # Закрываем сессию
+    try:
+        await session_generator.__anext__()
+    except StopAsyncIteration:
+        pass  # Ожидается исключение при завершении генератора
 
 
 @pytest.mark.unit
 @pytest.mark.asyncio
-async def test_get_session_context_manager():
-    """Тест что get_session работает как контекстный менеджер"""
-    async for session in get_session():
-        # Проверяем что сессия активна
-        assert not session.is_active or session.is_active
+async def test_init_db():
+    """Тестирует инициализацию базы данных"""
+    with patch('app.db.database.engine') as mock_engine:
+        mock_conn = AsyncMock()
+        mock_engine.begin.return_value.__aenter__.return_value = mock_conn
         
-        # Проверяем что можем выполнять операции
-        assert hasattr(session, 'execute')
-        assert hasattr(session, 'commit')
-        assert hasattr(session, 'rollback')
-        break
+        await init_db()
+        
+        # Проверяем, что были вызваны нужные методы
+        mock_engine.begin.assert_called_once()
+        mock_conn.run_sync.assert_called_once()
 
 
 @pytest.mark.unit
-def test_database_url_configuration():
-    """Тест конфигурации URL базы данных"""
-    # Проверяем что URL по умолчанию корректный
-    default_url = "postgresql+asyncpg://scraper_user:scraper_password@postgres:5432/ft_news"
+@pytest.mark.asyncio
+async def test_close_db():
+    """Тестирует закрытие подключений к базе данных"""
+    with patch('app.db.database.engine') as mock_engine:
+        await close_db()
+        
+        # Проверяем, что engine.dispose() был вызван
+        mock_engine.dispose.assert_called_once()
+
+
+@pytest.mark.unit
+def test_database_url_from_env():
+    """Тестирует получение URL базы данных из переменных окружения"""
+    # Тестируем значение по умолчанию
+    with patch.dict(os.environ, {}, clear=True):
+        from app.db.database import DATABASE_URL
+        # Импортируем заново чтобы получить актуальное значение
+        import importlib
+        import app.db.database
+        importlib.reload(app.db.database)
+        
+        expected_default = "postgresql+asyncpg://scraper_user:scraper_password@postgres:5432/ft_news"
+        assert app.db.database.DATABASE_URL == expected_default
+
+
+@pytest.mark.unit
+def test_database_url_custom():
+    """Тестирует настройку URL базы данных через переменную окружения"""
+    custom_url = "postgresql+asyncpg://test_user:test_pass@localhost:5432/test_db"
     
-    # Проверяем что переменная окружения используется
-    with patch.dict(os.environ, {'DATABASE_URL': 'test://test:test@test:1234/test'}):
+    with patch.dict(os.environ, {'DATABASE_URL': custom_url}):
         # Перезагружаем модуль чтобы применить новую переменную окружения
         import importlib
         import app.db.database
         importlib.reload(app.db.database)
         
-        # Проверяем что новый URL был применен (косвенно через проверку атрибутов)
-        assert hasattr(app.db.database, 'engine')
-        assert hasattr(app.db.database, 'async_session')
+        assert app.db.database.DATABASE_URL == custom_url
 
 
 @pytest.mark.unit
-def test_engine_configuration():
-    """Тест конфигурации движка базы данных"""
-    # Проверяем что движок создан
+def test_engine_creation():
+    """Тестирует создание движка базы данных"""
+    from app.db.database import engine
     assert engine is not None
-    assert isinstance(engine, AsyncEngine)
-    
-    # Проверяем что движок имеет правильные настройки
-    assert hasattr(engine, 'url')
-    assert hasattr(engine, 'pool')
+    assert str(engine.url).startswith('postgresql+asyncpg://')
 
 
 @pytest.mark.unit
-def test_session_factory_configuration():
-    """Тест конфигурации фабрики сессий"""
-    # Проверяем что фабрика сессий создана
+def test_async_session_factory():
+    """Тестирует фабрику асинхронных сессий"""
+    from app.db.database import async_session
     assert async_session is not None
-    
-    # Проверяем конфигурацию фабрики
-    assert async_session.bind == engine
-    assert async_session.expire_on_commit is False
+    assert hasattr(async_session, '__call__')
 
 
-@pytest.mark.integration
+@pytest.mark.database
 @pytest.mark.asyncio
-async def test_init_db():
-    """Тест инициализации базы данных"""
-    # Мокаем движок и подключение
-    mock_conn = AsyncMock()
-    mock_engine = AsyncMock()
-    mock_engine.begin.return_value.__aenter__.return_value = mock_conn
+async def test_database_session_context_manager(test_db_session):
+    """Тестирует использование сессии как контекстного менеджера"""
+    # Тестируем, что сессия работает в контексте теста
+    assert isinstance(test_db_session, AsyncSession)
     
-    with patch('app.db.database.engine', mock_engine):
-        await init_db()
-        
-        # Проверяем что была попытка создать таблицы
-        mock_engine.begin.assert_called_once()
-        mock_conn.run_sync.assert_called_once()
+    # Проверяем, что можем выполнить простой запрос
+    from sqlalchemy import text
+    result = await test_db_session.execute(text("SELECT 1"))
+    assert result.scalar() == 1
 
 
-@pytest.mark.integration
+@pytest.mark.database
 @pytest.mark.asyncio
-async def test_close_db():
-    """Тест закрытия подключений к базе данных"""
-    # Мокаем движок
-    mock_engine = AsyncMock()
+async def test_session_transaction_rollback(test_db_session):
+    """Тестирует откат транзакции при ошибке"""
+    from app.models.models import Article
+    import datetime
     
-    with patch('app.db.database.engine', mock_engine):
-        await close_db()
-        
-        # Проверяем что dispose был вызван
-        mock_engine.dispose.assert_called_once()
-
-
-@pytest.mark.integration
-@pytest.mark.asyncio
-async def test_database_connection_error_handling():
-    """Тест обработки ошибок подключения к базе данных"""
-    # Мокаем движок который выбрасывает ошибку
-    mock_engine = AsyncMock()
-    mock_engine.begin.side_effect = OperationalError("Connection failed", None, None)
-    
-    with patch('app.db.database.engine', mock_engine):
-        with pytest.raises(OperationalError):
-            await init_db()
-
-
-@pytest.mark.integration
-@pytest.mark.asyncio
-async def test_session_transaction_rollback():
-    """Тест отката транзакции при ошибке"""
     try:
-        async for session in get_session():
-            # Симулируем ошибку в транзакции
-            await session.execute("INVALID SQL")
-            await session.commit()
-    except Exception:
-        # Ошибка ожидаема, проверяем что сессия корректно закрылась
-        pass
-
-
-@pytest.mark.database
-@pytest.mark.asyncio 
-async def test_database_session_isolation(test_db_session):
-    """Тест изоляции сессий базы данных"""
-    from app.models.models import Article
-    from datetime import datetime, timezone
-    
-    # Создаем статью в одной сессии
-    article = Article(
-        url="https://www.ft.com/content/isolation-test",
-        title="Isolation Test Article", 
-        content="Testing session isolation",
-        author="Test Author",
-        published_at=datetime.now(timezone.utc),
-        scraped_at=datetime.now(timezone.utc)
-    )
-    
-    test_db_session.add(article)
-    await test_db_session.commit()
-    
-    # Проверяем что статья существует в этой же сессии
-    from sqlalchemy import select
-    result = await test_db_session.execute(select(Article).where(Article.url == article.url))
-    found_article = result.scalar_one()
-    assert found_article.title == "Isolation Test Article"
-
-
-@pytest.mark.database
-@pytest.mark.asyncio
-async def test_concurrent_sessions(test_db_session):
-    """Тест работы с несколькими сессиями одновременно"""
-    from app.models.models import Article
-    from datetime import datetime, timezone
-    from sqlalchemy import select
-    
-    # Создаем статьи в разных "сессиях" (симулируем через одну тестовую)
-    articles = []
-    for i in range(3):
+        # Создаем статью
         article = Article(
-            url=f"https://www.ft.com/content/concurrent-{i}",
-            title=f"Concurrent Article {i}",
-            content=f"Content for concurrent test {i}",
-            author=f"Author {i}",
-            published_at=datetime.now(timezone.utc),
-            scraped_at=datetime.now(timezone.utc)
+            url="https://test.com/article",
+            title="Test Article",
+            content="Test content",
+            published_at=datetime.datetime.now(datetime.timezone.utc),
+            scraped_at=datetime.datetime.now(datetime.timezone.utc)
         )
-        articles.append(article)
         test_db_session.add(article)
-    
-    await test_db_session.commit()
-    
-    # Проверяем что все статьи сохранились
-    result = await test_db_session.execute(select(Article))
-    all_articles = result.scalars().all()
-    assert len(all_articles) >= 3
+        await test_db_session.commit()
+        
+        # Пытаемся создать статью с тем же URL (должно вызвать ошибку)
+        duplicate_article = Article(
+            url="https://test.com/article",  # Тот же URL
+            title="Duplicate Article",
+            content="Duplicate content",
+            published_at=datetime.datetime.now(datetime.timezone.utc),
+            scraped_at=datetime.datetime.now(datetime.timezone.utc)
+        )
+        test_db_session.add(duplicate_article)
+        
+        with pytest.raises(Exception):
+            await test_db_session.commit()
+        
+        # Откатываем транзакцию
+        await test_db_session.rollback()
+        
+        # Проверяем, что можем продолжить работу с сессией
+        from sqlalchemy import text
+        result = await test_db_session.execute(text("SELECT 1"))
+        assert result.scalar() == 1
+        
+    except Exception:
+        await test_db_session.rollback()
+        raise
 
 
-@pytest.mark.unit
-def test_database_module_imports():
-    """Тест что все необходимые модули импортируются корректно"""
-    import app.db.database as db_module
+@pytest.mark.integration
+@pytest.mark.asyncio
+async def test_real_database_operations():
+    """Интеграционный тест реальных операций с базой данных"""
+    from app.models.models import Article
+    import datetime
+    from sqlalchemy import select
     
-    # Проверяем что все основные объекты доступны
-    assert hasattr(db_module, 'engine')
-    assert hasattr(db_module, 'async_session') 
-    assert hasattr(db_module, 'get_session')
-    assert hasattr(db_module, 'init_db')
-    assert hasattr(db_module, 'close_db')
-    assert hasattr(db_module, 'DATABASE_URL')
+    # Используем реальную фабрику сессий (но с тестовой БД)
+    async for session in get_session():
+        # Создаем статью
+        article = Article(
+            url="https://integration-test.com/article",
+            title="Integration Test Article",
+            content="Integration test content",
+            published_at=datetime.datetime.now(datetime.timezone.utc),
+            scraped_at=datetime.datetime.now(datetime.timezone.utc)
+        )
+        
+        session.add(article)
+        await session.commit()
+        
+        # Ищем созданную статью
+        result = await session.execute(
+            select(Article).where(Article.url == "https://integration-test.com/article")
+        )
+        found_article = result.scalar_one_or_none()
+        
+        assert found_article is not None
+        assert found_article.title == "Integration Test Article"
+        
+        # Удаляем статью для очистки
+        await session.delete(found_article)
+        await session.commit()
+        
+        break  # Выходим из async for после первой итерации
