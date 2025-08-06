@@ -3,12 +3,12 @@
 """
 import pytest
 import datetime
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, patch
 from bs4 import BeautifulSoup
 
 from app.scraper.scraper import FTScraper
 from app.models.models import Article
-from sqlalchemy import select, func
+from sqlalchemy import select
 
 
 @pytest.mark.unit

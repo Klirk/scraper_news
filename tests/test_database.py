@@ -5,7 +5,7 @@ import pytest
 import os
 from unittest.mock import AsyncMock, patch
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.db.database import get_session, init_db, close_db, engine, async_session
+from app.db.database import get_session, init_db, close_db
 
 
 @pytest.mark.unit

@@ -4,14 +4,14 @@
 import pytest
 import asyncio
 import datetime
-from unittest.mock import AsyncMock, patch, MagicMock
+from unittest.mock import AsyncMock, patch
 from sqlalchemy import select
 
 from app.main import main
 from app.scheduler.scheduler import ScrapingScheduler
 from app.scraper.scraper import FTScraper
 from app.models.models import Article
-from app.db.database import init_db, close_db
+from app.db.database import init_db
 
 
 @pytest.mark.integration

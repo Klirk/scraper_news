@@ -176,7 +176,7 @@ async def test_start_first_run():
     original_sleep = asyncio.sleep
     sleep_count = 0
     
-    async def mock_sleep(duration):
+    async def mock_sleep(_duration):
         nonlocal sleep_count
         sleep_count += 1
         if sleep_count > 2:  # Прерываем после нескольких итераций
@@ -211,7 +211,7 @@ async def test_start_normal_run():
     # Мокаем asyncio.sleep чтобы не ждать
     sleep_count = 0
     
-    async def mock_sleep(duration):
+    async def mock_sleep(_duration):
         nonlocal sleep_count
         sleep_count += 1
         if sleep_count > 2:  # Прерываем после нескольких итераций
