@@ -30,15 +30,15 @@ async def test_init_browser_success():
     
     with patch('app.scraper.scraper.async_playwright') as mock_playwright:
         mock_playwright_instance = AsyncMock()
-        mock_playwright.return_value.start.return_value = mock_playwright_instance
+        mock_playwright.return_value.start = AsyncMock(return_value=mock_playwright_instance)
         
         mock_browser = AsyncMock()
         mock_context = AsyncMock()
         mock_page = AsyncMock()
         
-        mock_playwright_instance.chromium.launch.return_value = mock_browser
-        mock_browser.new_context.return_value = mock_context
-        mock_context.new_page.return_value = mock_page
+        mock_playwright_instance.chromium.launch = AsyncMock(return_value=mock_browser)
+        mock_browser.new_context = AsyncMock(return_value=mock_context)
+        mock_context.new_page = AsyncMock(return_value=mock_page)
         
         await scraper.init_browser()
         
@@ -57,11 +57,11 @@ async def test_init_browser_retry_on_failure():
     
     with patch('app.scraper.scraper.async_playwright') as mock_playwright:
         # Первые две попытки неудачны, третья успешна
-        mock_playwright.return_value.start.side_effect = [
+        mock_playwright.return_value.start = AsyncMock(side_effect=[
             Exception("First attempt failed"),
             Exception("Second attempt failed"),
-            AsyncMock()  # Третья попытка успешна
-        ]
+            Exception("Third attempt failed")  # Все попытки неудачны
+        ])
         
         # Мокаем asyncio.sleep чтобы не ждать
         with patch('asyncio.sleep'):

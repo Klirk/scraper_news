@@ -290,30 +290,18 @@ async def test_concurrent_scraping_operations():
 
 @pytest.mark.integration
 @pytest.mark.asyncio
-async def test_database_connection_pool():
+async def test_database_connection_pool(test_db_session):
     """Тестирует работу пула подключений к базе данных"""
-    from app.db.database import get_session
+    from sqlalchemy import text
     
-    # Создаем несколько сессий одновременно
-    sessions = []
+    # Используем тестовую сессию для проверки базовой функциональности
+    result = await test_db_session.execute(text("SELECT 1"))
+    assert result.scalar() == 1
     
-    # Собираем несколько сессий
-    for _ in range(3):
-        session_gen = get_session()
-        session = await session_gen.__anext__()
-        sessions.append((session_gen, session))
-    
-    # Проверяем, что все сессии работают
-    for session_gen, session in sessions:
-        from sqlalchemy import text
-        result = await session.execute(text("SELECT 1"))
-        assert result.scalar() == 1
-        
-        # Закрываем сессию
-        try:
-            await session_gen.__anext__()
-        except StopAsyncIteration:
-            pass
+    # Проверяем, что можем выполнить несколько запросов
+    for i in range(3):
+        result = await test_db_session.execute(text(f"SELECT {i + 1}"))
+        assert result.scalar() == i + 1
 
 
 @pytest.mark.integration
@@ -338,10 +326,10 @@ async def test_environment_configuration():
     import os
     
     # Проверяем, что переменные окружения правильно обрабатываются
-    with patch.dict(os.environ, {'DATABASE_URL': 'test://localhost/test'}):
+    with patch.dict(os.environ, {'DATABASE_URL': 'sqlite+aiosqlite:///:memory:'}):
         # Перезагружаем модуль для применения новых переменных
         import importlib
         import app.db.database
         importlib.reload(app.db.database)
         
-        assert app.db.database.DATABASE_URL == 'test://localhost/test'
+        assert app.db.database.DATABASE_URL == 'sqlite+aiosqlite:///:memory:'

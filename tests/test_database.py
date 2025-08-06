@@ -44,6 +44,7 @@ async def test_init_db():
 async def test_close_db():
     """Тестирует закрытие подключений к базе данных"""
     with patch('app.db.database.engine') as mock_engine:
+        mock_engine.dispose = AsyncMock()
         await close_db()
         
         # Проверяем, что engine.dispose() был вызван
@@ -155,37 +156,36 @@ async def test_session_transaction_rollback(test_db_session):
 
 @pytest.mark.integration
 @pytest.mark.asyncio
-async def test_real_database_operations():
+async def test_real_database_operations(test_db_session):
     """Интеграционный тест реальных операций с базой данных"""
     from app.models.models import Article
     import datetime
     from sqlalchemy import select
     
-    # Используем реальную фабрику сессий (но с тестовой БД)
-    async for session in get_session():
-        # Создаем статью
-        article = Article(
-            url="https://integration-test.com/article",
-            title="Integration Test Article",
-            content="Integration test content",
-            published_at=datetime.datetime.now(datetime.timezone.utc),
-            scraped_at=datetime.datetime.now(datetime.timezone.utc)
-        )
-        
-        session.add(article)
-        await session.commit()
-        
-        # Ищем созданную статью
-        result = await session.execute(
-            select(Article).where(Article.url == "https://integration-test.com/article")
-        )
-        found_article = result.scalar_one_or_none()
-        
-        assert found_article is not None
-        assert found_article.title == "Integration Test Article"
-        
-        # Удаляем статью для очистки
-        await session.delete(found_article)
-        await session.commit()
-        
-        break  # Выходим из async for после первой итерации
+    # Используем тестовую сессию
+    session = test_db_session
+    
+    # Создаем статью
+    article = Article(
+        url="https://integration-test.com/article",
+        title="Integration Test Article",
+        content="Integration test content",
+        published_at=datetime.datetime.now(datetime.timezone.utc),
+        scraped_at=datetime.datetime.now(datetime.timezone.utc)
+    )
+    
+    session.add(article)
+    await session.commit()
+    
+    # Ищем созданную статью
+    result = await session.execute(
+        select(Article).where(Article.url == "https://integration-test.com/article")
+    )
+    found_article = result.scalar_one_or_none()
+    
+    assert found_article is not None
+    assert found_article.title == "Integration Test Article"
+    
+    # Удаляем статью для очистки
+    await session.delete(found_article)
+    await session.commit()
