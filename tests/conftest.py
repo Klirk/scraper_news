@@ -25,7 +25,6 @@ def event_loop():
 @pytest_asyncio.fixture(scope="function")
 async def test_db_session() -> AsyncGenerator[AsyncSession, None]:
     """Создает тестовую сессию базы данных в памяти"""
-    # Создаем тестовую базу данных в памяти
     engine = create_async_engine(
         "sqlite+aiosqlite:///:memory:",
         echo=False,
