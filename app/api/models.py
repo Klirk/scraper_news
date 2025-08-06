@@ -19,7 +19,7 @@ class ArticleResponse(ArticleBase):
     """Модель статьи для ответа API"""
     id: int
     scraped_at: datetime
-    
+
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -30,9 +30,6 @@ class ArticleListResponse(BaseModel):
     page: int
     page_size: int
     total_pages: int
-
-
-
 
 
 class StatusResponse(BaseModel):

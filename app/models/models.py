@@ -12,14 +12,16 @@ from sqlalchemy.orm import (
     Mapped, mapped_column, DeclarativeBase
 )
 
+
 # SQLAlchemy ORM модели для работы с базой данных
 class Base(DeclarativeBase):
     pass
 
+
 # SQLAlchemy модель для хранения статей новостей
 class Article(Base):
     __tablename__ = "articles"
-    __table_args__ = (UniqueConstraint("url", name="uq_article_url"),) # Уникальный индекс по URL
+    __table_args__ = (UniqueConstraint("url", name="uq_article_url"),)  # Уникальный индекс по URL
 
     id: Mapped[int] = mapped_column(primary_key=True)
 

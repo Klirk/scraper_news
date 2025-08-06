@@ -1,8 +1,9 @@
 """
 Основное FastAPI приложение для Financial Times скрапера
 """
+import os
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from loguru import logger
@@ -13,7 +14,7 @@ from app.db.database import init_db, close_db
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(_app: FastAPI):
     """Управление жизненным циклом приложения"""
     # Startup
     logger.info("🚀 Запуск FastAPI приложения...")
@@ -22,9 +23,9 @@ async def lifespan(app: FastAPI):
         logger.info("📊 Инициализация базы данных...")
         await init_db()
         logger.info("✅ База данных инициализирована")
-        
+
         yield
-        
+
     except Exception as e:
         logger.error(f"❌ Ошибка инициализации: {e}")
         raise
@@ -44,14 +45,7 @@ app = FastAPI(
     ## Возможности
     
     * **Статьи** - получение статей с пагинацией и фильтрацией
-    * **Скрапинг** - управление процессом скрапинга
     * **Система** - мониторинг статуса и статистики
-    
-    ## Режимы скрапинга
-    
-    * **adaptive** - автоматически определяет режим (по умолчанию)
-    * **initial** - первоначальный скрапинг (30 дней)
-    * **hourly** - почасовой скрапинг новых статей
     """,
     version="1.0.0",
     docs_url="/docs",
@@ -62,7 +56,7 @@ app = FastAPI(
 # Настройка CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # В продакшене лучше указать конкретные домены
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -75,14 +69,18 @@ app.include_router(system_router, prefix="/api/v1")
 
 # Глобальная обработка ошибок
 @app.exception_handler(Exception)
-async def global_exception_handler(request, exc):
+async def global_exception_handler(_request, exc):
     """Глобальная обработка неожиданных ошибок"""
     logger.error(f"Неожиданная ошибка: {exc}")
+
+    # Показываем детали ошибки только в режиме отладки
+    debug_mode = os.getenv("DEBUG", "false").lower() == "true"
+
     return JSONResponse(
         status_code=500,
         content=ErrorResponse(
             error="Внутренняя ошибка сервера",
-            detail=str(exc) if app.debug else None
+            detail=str(exc) if debug_mode else None
         ).model_dump()
     )
 
@@ -113,12 +111,16 @@ async def health_check():
 @app.middleware("http")
 async def log_requests(request, call_next):
     """Логирование HTTP запросов"""
-    start_time = logger.info(f"🌐 {request.method} {request.url}")
-    
+    import time
+
+    start_time = time.time()
+    logger.info(f"🌐 {request.method} {request.url}")
+
     response = await call_next(request)
-    
+
+    process_time = time.time() - start_time
     logger.info(
-        f"✅ {request.method} {request.url} - {response.status_code}"
+        f"✅ {request.method} {request.url} - {response.status_code} ({process_time:.3f}s)"
     )
-    
+
     return response
