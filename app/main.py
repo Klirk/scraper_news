@@ -1,12 +1,14 @@
 """
-Главный модуль Financial Times скрапера
+Главный модуль Financial Times скрапера с FastAPI
 """
 import asyncio
+import uvicorn
 from loguru import logger
 from dotenv import load_dotenv
 
 from app.scheduler.scheduler import ScrapingScheduler
 from app.db.database import init_db, close_db
+from app.api.app import app as fastapi_app
 
 # Загрузка переменных окружения
 load_dotenv()
@@ -29,19 +31,52 @@ logger.add(
 )
 
 
+async def run_scheduler():
+    """Запуск планировщика скрапинга"""
+    try:
+        logger.info("⏰ Запуск планировщика...")
+        scheduler = ScrapingScheduler()
+        await scheduler.start()
+    except Exception as e:
+        logger.error(f"❌ Ошибка планировщика: {e}")
+        raise
+
+
+async def run_fastapi():
+    """Запуск FastAPI сервера"""
+    try:
+        logger.info("🌐 Запуск FastAPI сервера...")
+        config = uvicorn.Config(
+            app=fastapi_app,
+            host="0.0.0.0",
+            port=8000,
+            log_level="info",
+            access_log=True
+        )
+        server = uvicorn.Server(config)
+        await server.serve()
+    except Exception as e:
+        logger.error(f"❌ Ошибка FastAPI сервера: {e}")
+        raise
+
+
 async def main():
     """Главная функция запуска приложения"""
     try:
-        logger.info("🚀 Запуск Financial Times скрапера...")
+        logger.info("🚀 Запуск Financial Times скрапера с FastAPI...")
         
         # Инициализация базы данных
         logger.info("📊 Инициализация базы данных...")
         await init_db()
         
-        # Запуск планировщика задач
-        logger.info("⏰ Запуск планировщика...")
-        scheduler = ScrapingScheduler()
-        await scheduler.start()
+        logger.info("🔥 Запуск сервисов параллельно...")
+        
+        # Запуск FastAPI и планировщика параллельно
+        await asyncio.gather(
+            run_fastapi(),
+            run_scheduler(),
+            return_exceptions=True
+        )
         
     except KeyboardInterrupt:
         logger.info("⏹️ Получен сигнал остановки...")

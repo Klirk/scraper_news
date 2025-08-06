@@ -1073,3 +1073,206 @@
 2025-08-06 11:57:41 | WARNING | app.scraper.scraper:scrape_articles_with_pagination:247 | ⚠️ Страница 5 не содержит подходящих статей
 2025-08-06 11:57:41 | INFO | app.scraper.scraper:scrape_articles_with_pagination:251 | 🛑 Найдено 3 страницы подряд без статей, прекращаем скрапинг
 2025-08-06 11:57:41 | INFO | app.scraper.scraper:scrape_articles_with_pagination:268 | 🎉 Завершен скрапинг с пагинацией: собрано 2 статей с 5 страниц
+2025-08-06 09:30:00 | INFO | __main__:main:35 | 🚀 Запуск Financial Times скрапера...
+2025-08-06 09:30:00 | INFO | __main__:main:38 | 📊 Инициализация базы данных...
+2025-08-06 09:30:00 | INFO | app.db.database:init_db:50 | ✅ База данных инициализирована
+2025-08-06 09:30:00 | INFO | __main__:main:42 | ⏰ Запуск планировщика...
+2025-08-06 09:30:00 | INFO | app.scheduler.scheduler:start:49 | ⚡ Запуск планировщика задач...
+2025-08-06 09:30:00 | INFO | app.scraper.scraper:is_first_run:82 | 📊 Статей в базе: 1144, первый запуск: False
+2025-08-06 09:30:00 | INFO | app.scheduler.scheduler:start:74 | 🔄 Обычный запуск - используем адаптивный режим...
+2025-08-06 09:30:00 | INFO | app.scheduler.scheduler:adaptive_scrape_job:40 | 🤖 Запуск адаптивной задачи скрапинга...
+2025-08-06 09:30:00 | INFO | app.scraper.scraper:run_scraping:347 | 🚀 Запуск скрапинга Financial Times...
+2025-08-06 09:30:01 | INFO | app.scraper.scraper:init_browser:54 | 🌐 Браузер успешно инициализирован
+2025-08-06 09:30:01 | INFO | app.scraper.scraper:is_first_run:82 | 📊 Статей в базе: 1144, первый запуск: False
+2025-08-06 09:30:01 | INFO | app.scraper.scraper:run_scraping:365 | ⏰ Обычный запуск - собираем статьи за последний час...
+2025-08-06 09:30:01 | INFO | app.scraper.scraper:scrape_articles_with_pagination:236 | 📚 Начинаем скрапинг с пагинацией (макс. 5 страниц)...
+2025-08-06 09:30:01 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 1 (попытка 1/3): https://www.ft.com/world
+2025-08-06 09:30:07 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 26 элементов статей на странице 1
+2025-08-06 09:30:07 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:30:07 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 3 статей со страницы 1
+2025-08-06 09:30:08 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 2 (попытка 1/3): https://www.ft.com/world?page=2
+2025-08-06 09:30:12 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 2
+2025-08-06 09:30:12 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:30:12 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:30:12 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:30:12 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:30:12 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 0 статей со страницы 2
+2025-08-06 09:30:12 | WARNING | app.scraper.scraper:scrape_articles_with_pagination:247 | ⚠️ Страница 2 не содержит подходящих статей
+2025-08-06 09:30:13 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 3 (попытка 1/3): https://www.ft.com/world?page=3
+2025-08-06 09:34:32 | INFO | __main__:main:66 | 🚀 Запуск Financial Times скрапера с FastAPI...
+2025-08-06 09:34:32 | INFO | __main__:main:69 | 📊 Инициализация базы данных...
+2025-08-06 09:34:32 | INFO | app.db.database:init_db:50 | ✅ База данных инициализирована
+2025-08-06 09:34:32 | INFO | __main__:main:72 | 🔥 Запуск сервисов параллельно...
+2025-08-06 09:34:32 | INFO | __main__:run_fastapi:48 | 🌐 Запуск FastAPI сервера...
+2025-08-06 09:34:32 | INFO | __main__:run_scheduler:37 | ⏰ Запуск планировщика...
+2025-08-06 09:34:32 | INFO | app.scheduler.scheduler:start:49 | ⚡ Запуск планировщика задач...
+2025-08-06 09:34:32 | INFO | app.api.app:lifespan:19 | 🚀 Запуск FastAPI приложения...
+2025-08-06 09:34:32 | INFO | app.api.app:lifespan:22 | 📊 Инициализация базы данных...
+2025-08-06 09:34:32 | INFO | app.scraper.scraper:is_first_run:82 | 📊 Статей в базе: 1144, первый запуск: False
+2025-08-06 09:34:32 | INFO | app.scheduler.scheduler:start:74 | 🔄 Обычный запуск - используем адаптивный режим...
+2025-08-06 09:34:32 | INFO | app.scheduler.scheduler:adaptive_scrape_job:40 | 🤖 Запуск адаптивной задачи скрапинга...
+2025-08-06 09:34:32 | INFO | app.scraper.scraper:run_scraping:347 | 🚀 Запуск скрапинга Financial Times...
+2025-08-06 09:34:32 | INFO | app.db.database:init_db:50 | ✅ База данных инициализирована
+2025-08-06 09:34:32 | INFO | app.api.app:lifespan:24 | ✅ База данных инициализирована
+2025-08-06 09:34:33 | INFO | app.scraper.scraper:init_browser:54 | 🌐 Браузер успешно инициализирован
+2025-08-06 09:34:33 | INFO | app.scraper.scraper:is_first_run:82 | 📊 Статей в базе: 1144, первый запуск: False
+2025-08-06 09:34:33 | INFO | app.scraper.scraper:run_scraping:365 | ⏰ Обычный запуск - собираем статьи за последний час...
+2025-08-06 09:34:33 | INFO | app.scraper.scraper:scrape_articles_with_pagination:236 | 📚 Начинаем скрапинг с пагинацией (макс. 5 страниц)...
+2025-08-06 09:34:33 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 1 (попытка 1/3): https://www.ft.com/world
+2025-08-06 09:34:38 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 26 элементов статей на странице 1
+2025-08-06 09:34:38 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:34:38 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 5 статей со страницы 1
+2025-08-06 09:34:39 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 2 (попытка 1/3): https://www.ft.com/world?page=2
+2025-08-06 09:34:43 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 2
+2025-08-06 09:34:43 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:34:43 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:34:43 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:34:43 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:34:43 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 0 статей со страницы 2
+2025-08-06 09:34:43 | WARNING | app.scraper.scraper:scrape_articles_with_pagination:247 | ⚠️ Страница 2 не содержит подходящих статей
+2025-08-06 09:34:44 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 3 (попытка 1/3): https://www.ft.com/world?page=3
+2025-08-06 09:34:48 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 3
+2025-08-06 09:34:48 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:34:48 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:34:48 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:34:48 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:34:48 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 0 статей со страницы 3
+2025-08-06 09:34:48 | WARNING | app.scraper.scraper:scrape_articles_with_pagination:247 | ⚠️ Страница 3 не содержит подходящих статей
+2025-08-06 09:34:49 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 4 (попытка 1/3): https://www.ft.com/world?page=4
+2025-08-06 09:34:53 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 4
+2025-08-06 09:34:53 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:34:53 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:34:53 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:34:53 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:34:53 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 0 статей со страницы 4
+2025-08-06 09:34:53 | WARNING | app.scraper.scraper:scrape_articles_with_pagination:247 | ⚠️ Страница 4 не содержит подходящих статей
+2025-08-06 09:34:53 | INFO | app.scraper.scraper:scrape_articles_with_pagination:251 | 🛑 Найдено 3 страницы подряд без статей, прекращаем скрапинг
+2025-08-06 09:34:53 | INFO | app.scraper.scraper:scrape_articles_with_pagination:268 | 🎉 Завершен скрапинг с пагинацией: собрано 5 статей с 4 страниц
+2025-08-06 09:34:53 | INFO | app.scraper.scraper:save_articles_to_db:328 | 📦 Обработан batch: сохранено 3 статей
+2025-08-06 09:34:53 | INFO | app.scraper.scraper:save_articles_to_db:328 | 📦 Обработан batch: сохранено 0 статей
+2025-08-06 09:34:53 | INFO | app.scraper.scraper:save_articles_to_db:328 | 📦 Обработан batch: сохранено 0 статей
+2025-08-06 09:34:53 | INFO | app.scraper.scraper:save_articles_to_db:338 | ✅ Итого сохранено 3 новых статей в базу данных
+2025-08-06 09:34:53 | INFO | app.scraper.scraper:run_scraping:375 | 🎉 Скрапинг завершен! Обработано: 5, сохранено: 3
+2025-08-06 09:34:53 | INFO | app.scraper.scraper:close_browser:70 | 🔴 Браузер закрыт
+2025-08-06 09:34:53 | INFO | app.scheduler.scheduler:adaptive_scrape_job:42 | ✅ Адаптивная задача скрапинга завершена
+2025-08-06 09:34:53 | INFO | app.scheduler.scheduler:start:89 | ✅ Планировщик запущен в почасовом режиме (каждый час)
+2025-08-06 09:37:38 | INFO | app.api.app:lifespan:33 | 🔌 Закрытие подключений к базе данных...
+2025-08-06 09:37:38 | INFO | app.db.database:close_db:57 | 🔌 Подключения к базе данных закрыты
+2025-08-06 09:37:38 | INFO | app.api.app:lifespan:35 | ✅ FastAPI приложение остановлено
+2025-08-06 09:39:10 | INFO | __main__:main:66 | 🚀 Запуск Financial Times скрапера с FastAPI...
+2025-08-06 09:39:10 | INFO | __main__:main:69 | 📊 Инициализация базы данных...
+2025-08-06 09:39:10 | INFO | app.db.database:init_db:50 | ✅ База данных инициализирована
+2025-08-06 09:39:10 | INFO | __main__:main:72 | 🔥 Запуск сервисов параллельно...
+2025-08-06 09:39:10 | INFO | __main__:run_fastapi:48 | 🌐 Запуск FastAPI сервера...
+2025-08-06 09:39:10 | INFO | __main__:run_scheduler:37 | ⏰ Запуск планировщика...
+2025-08-06 09:39:10 | INFO | app.scheduler.scheduler:start:49 | ⚡ Запуск планировщика задач...
+2025-08-06 09:39:10 | INFO | app.api.app:lifespan:19 | 🚀 Запуск FastAPI приложения...
+2025-08-06 09:39:10 | INFO | app.api.app:lifespan:22 | 📊 Инициализация базы данных...
+2025-08-06 09:39:10 | INFO | app.scraper.scraper:is_first_run:82 | 📊 Статей в базе: 1147, первый запуск: False
+2025-08-06 09:39:10 | INFO | app.scheduler.scheduler:start:74 | 🔄 Обычный запуск - используем адаптивный режим...
+2025-08-06 09:39:10 | INFO | app.scheduler.scheduler:adaptive_scrape_job:40 | 🤖 Запуск адаптивной задачи скрапинга...
+2025-08-06 09:39:10 | INFO | app.scraper.scraper:run_scraping:347 | 🚀 Запуск скрапинга Financial Times...
+2025-08-06 09:39:10 | INFO | app.db.database:init_db:50 | ✅ База данных инициализирована
+2025-08-06 09:39:10 | INFO | app.api.app:lifespan:24 | ✅ База данных инициализирована
+2025-08-06 09:39:10 | INFO | app.scraper.scraper:init_browser:54 | 🌐 Браузер успешно инициализирован
+2025-08-06 09:39:10 | INFO | app.scraper.scraper:is_first_run:82 | 📊 Статей в базе: 1147, первый запуск: False
+2025-08-06 09:39:10 | INFO | app.scraper.scraper:run_scraping:365 | ⏰ Обычный запуск - собираем статьи за последний час...
+2025-08-06 09:39:10 | INFO | app.scraper.scraper:scrape_articles_with_pagination:236 | 📚 Начинаем скрапинг с пагинацией (макс. 5 страниц)...
+2025-08-06 09:39:10 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 1 (попытка 1/3): https://www.ft.com/world
+2025-08-06 09:39:16 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 26 элементов статей на странице 1
+2025-08-06 09:39:16 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:39:16 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 5 статей со страницы 1
+2025-08-06 09:39:17 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 2 (попытка 1/3): https://www.ft.com/world?page=2
+2025-08-06 09:39:17 | INFO | app.api.app:lifespan:33 | 🔌 Закрытие подключений к базе данных...
+2025-08-06 09:39:17 | INFO | app.db.database:close_db:57 | 🔌 Подключения к базе данных закрыты
+2025-08-06 09:39:17 | INFO | app.api.app:lifespan:35 | ✅ FastAPI приложение остановлено
+2025-08-06 09:39:22 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 2
+2025-08-06 09:39:22 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:39:22 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:39:22 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:39:22 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:39:22 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 0 статей со страницы 2
+2025-08-06 09:39:22 | WARNING | app.scraper.scraper:scrape_articles_with_pagination:247 | ⚠️ Страница 2 не содержит подходящих статей
+2025-08-06 09:39:23 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 3 (попытка 1/3): https://www.ft.com/world?page=3
+2025-08-06 09:39:27 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 3
+2025-08-06 09:39:27 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:39:27 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:39:27 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:39:27 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:39:27 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 0 статей со страницы 3
+2025-08-06 09:39:27 | WARNING | app.scraper.scraper:scrape_articles_with_pagination:247 | ⚠️ Страница 3 не содержит подходящих статей
+2025-08-06 09:39:29 | INFO | __main__:main:66 | 🚀 Запуск Financial Times скрапера с FastAPI...
+2025-08-06 09:39:29 | INFO | __main__:main:69 | 📊 Инициализация базы данных...
+2025-08-06 09:39:29 | INFO | app.db.database:init_db:50 | ✅ База данных инициализирована
+2025-08-06 09:39:29 | INFO | __main__:main:72 | 🔥 Запуск сервисов параллельно...
+2025-08-06 09:39:29 | INFO | __main__:run_fastapi:48 | 🌐 Запуск FastAPI сервера...
+2025-08-06 09:39:29 | INFO | __main__:run_scheduler:37 | ⏰ Запуск планировщика...
+2025-08-06 09:39:29 | INFO | app.scheduler.scheduler:start:49 | ⚡ Запуск планировщика задач...
+2025-08-06 09:39:29 | INFO | app.api.app:lifespan:19 | 🚀 Запуск FastAPI приложения...
+2025-08-06 09:39:29 | INFO | app.api.app:lifespan:22 | 📊 Инициализация базы данных...
+2025-08-06 09:39:29 | INFO | app.scraper.scraper:is_first_run:82 | 📊 Статей в базе: 1147, первый запуск: False
+2025-08-06 09:39:29 | INFO | app.scheduler.scheduler:start:74 | 🔄 Обычный запуск - используем адаптивный режим...
+2025-08-06 09:39:29 | INFO | app.scheduler.scheduler:adaptive_scrape_job:40 | 🤖 Запуск адаптивной задачи скрапинга...
+2025-08-06 09:39:29 | INFO | app.scraper.scraper:run_scraping:347 | 🚀 Запуск скрапинга Financial Times...
+2025-08-06 09:39:29 | INFO | app.db.database:init_db:50 | ✅ База данных инициализирована
+2025-08-06 09:39:29 | INFO | app.api.app:lifespan:24 | ✅ База данных инициализирована
+2025-08-06 09:39:30 | INFO | app.scraper.scraper:init_browser:54 | 🌐 Браузер успешно инициализирован
+2025-08-06 09:39:30 | INFO | app.scraper.scraper:is_first_run:82 | 📊 Статей в базе: 1147, первый запуск: False
+2025-08-06 09:39:30 | INFO | app.scraper.scraper:run_scraping:365 | ⏰ Обычный запуск - собираем статьи за последний час...
+2025-08-06 09:39:30 | INFO | app.scraper.scraper:scrape_articles_with_pagination:236 | 📚 Начинаем скрапинг с пагинацией (макс. 5 страниц)...
+2025-08-06 09:39:30 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 1 (попытка 1/3): https://www.ft.com/world
+2025-08-06 09:39:32 | INFO | app.api.app:log_requests:116 | 🌐 GET http://localhost:8000/
+2025-08-06 09:39:32 | INFO | app.api.app:log_requests:120 | ✅ GET http://localhost:8000/ - 200
+2025-08-06 09:39:33 | INFO | app.api.app:log_requests:116 | 🌐 GET http://localhost:8000/favicon.ico
+2025-08-06 09:39:33 | INFO | app.api.app:log_requests:120 | ✅ GET http://localhost:8000/favicon.ico - 404
+2025-08-06 09:39:34 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 26 элементов статей на странице 1
+2025-08-06 09:39:34 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:39:34 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 5 статей со страницы 1
+2025-08-06 09:39:35 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 2 (попытка 1/3): https://www.ft.com/world?page=2
+2025-08-06 09:39:39 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 2
+2025-08-06 09:39:39 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:39:39 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:39:40 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:39:40 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:39:40 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 0 статей со страницы 2
+2025-08-06 09:39:40 | WARNING | app.scraper.scraper:scrape_articles_with_pagination:247 | ⚠️ Страница 2 не содержит подходящих статей
+2025-08-06 09:39:41 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 3 (попытка 1/3): https://www.ft.com/world?page=3
+2025-08-06 09:39:45 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 3
+2025-08-06 09:39:45 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:39:45 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:39:45 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:39:45 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:39:45 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 0 статей со страницы 3
+2025-08-06 09:39:45 | WARNING | app.scraper.scraper:scrape_articles_with_pagination:247 | ⚠️ Страница 3 не содержит подходящих статей
+2025-08-06 09:39:46 | INFO | app.scraper.scraper:scrape_single_page:175 | 📄 Скрапинг страницы 4 (попытка 1/3): https://www.ft.com/world?page=4
+2025-08-06 09:39:48 | INFO | app.api.app:log_requests:116 | 🌐 GET http://localhost:8000/docs
+2025-08-06 09:39:48 | INFO | app.api.app:log_requests:120 | ✅ GET http://localhost:8000/docs - 200
+2025-08-06 09:39:49 | INFO | app.api.app:log_requests:116 | 🌐 GET http://localhost:8000/openapi.json
+2025-08-06 09:39:49 | INFO | app.api.app:log_requests:120 | ✅ GET http://localhost:8000/openapi.json - 200
+2025-08-06 09:39:50 | INFO | app.scraper.scraper:scrape_single_page:206 | 🔍 Найдено 29 элементов статей на странице 4
+2025-08-06 09:39:50 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:39:50 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:39:50 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:39:50 | WARNING | app.scraper.scraper:_extract_article_data:129 | ⚠️ Не найден заголовок статьи
+2025-08-06 09:39:50 | INFO | app.scraper.scraper:scrape_single_page:218 | ✅ Успешно извлечено 0 статей со страницы 4
+2025-08-06 09:39:50 | WARNING | app.scraper.scraper:scrape_articles_with_pagination:247 | ⚠️ Страница 4 не содержит подходящих статей
+2025-08-06 09:39:50 | INFO | app.scraper.scraper:scrape_articles_with_pagination:251 | 🛑 Найдено 3 страницы подряд без статей, прекращаем скрапинг
+2025-08-06 09:39:50 | INFO | app.scraper.scraper:scrape_articles_with_pagination:268 | 🎉 Завершен скрапинг с пагинацией: собрано 5 статей с 4 страниц
+2025-08-06 09:39:50 | INFO | app.scraper.scraper:save_articles_to_db:328 | 📦 Обработан batch: сохранено 1 статей
+2025-08-06 09:39:50 | INFO | app.scraper.scraper:save_articles_to_db:328 | 📦 Обработан batch: сохранено 0 статей
+2025-08-06 09:39:50 | INFO | app.scraper.scraper:save_articles_to_db:328 | 📦 Обработан batch: сохранено 0 статей
+2025-08-06 09:39:50 | INFO | app.scraper.scraper:save_articles_to_db:338 | ✅ Итого сохранено 1 новых статей в базу данных
+2025-08-06 09:39:50 | INFO | app.scraper.scraper:run_scraping:375 | 🎉 Скрапинг завершен! Обработано: 5, сохранено: 1
+2025-08-06 09:39:50 | INFO | app.scraper.scraper:close_browser:70 | 🔴 Браузер закрыт
+2025-08-06 09:39:50 | INFO | app.scheduler.scheduler:adaptive_scrape_job:42 | ✅ Адаптивная задача скрапинга завершена
+2025-08-06 09:39:50 | INFO | app.scheduler.scheduler:start:89 | ✅ Планировщик запущен в почасовом режиме (каждый час)
+2025-08-06 09:40:04 | INFO | app.api.app:log_requests:116 | 🌐 GET http://localhost:8000/
+2025-08-06 09:40:04 | INFO | app.api.app:log_requests:120 | ✅ GET http://localhost:8000/ - 200
+2025-08-06 09:40:15 | INFO | app.api.app:log_requests:116 | 🌐 GET http://localhost:8000/health
+2025-08-06 09:40:15 | INFO | app.api.app:log_requests:120 | ✅ GET http://localhost:8000/health - 200
+2025-08-06 09:40:31 | INFO | app.api.app:log_requests:116 | 🌐 GET http://localhost:8000/api/v1/system/status
+2025-08-06 09:40:31 | INFO | app.api.app:log_requests:120 | ✅ GET http://localhost:8000/api/v1/system/status - 200
+2025-08-06 09:41:00 | INFO | app.api.app:log_requests:116 | 🌐 GET http://localhost:8000/api/v1/system/stats
+2025-08-06 09:41:00 | INFO | app.api.app:log_requests:120 | ✅ GET http://localhost:8000/api/v1/system/stats - 200
+2025-08-06 09:41:27 | INFO | app.api.app:log_requests:116 | 🌐 GET http://localhost:8000/api/v1/articles/?page=1&page_size=20
+2025-08-06 09:41:27 | INFO | app.api.app:log_requests:120 | ✅ GET http://localhost:8000/api/v1/articles/?page=1&page_size=20 - 200

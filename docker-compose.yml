@@ -45,6 +45,8 @@ services:
       # Настройки логирования
       LOG_LEVEL: INFO
 
+    ports:
+      - "8000:8000"  # Проброс порта для FastAPI
     depends_on:
       postgres:
         condition: service_healthy
