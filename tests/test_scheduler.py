@@ -3,7 +3,7 @@
 """
 import pytest
 import asyncio
-from unittest.mock import AsyncMock, patch, MagicMock, PropertyMock
+from unittest.mock import AsyncMock, patch, MagicMock
 from app.scheduler.scheduler import ScrapingScheduler
 
 
@@ -124,11 +124,9 @@ async def test_start_manual_mode_with_exception():
 async def test_stop():
     """Тестирует остановку планировщика"""
     scheduler = ScrapingScheduler()
-    scheduler.scheduler.shutdown = MagicMock()
-    
-    # Мокаем свойство running через PropertyMock
-    with patch.object(type(scheduler.scheduler), 'running', new_callable=PropertyMock) as mock_running:
-        mock_running.return_value = True
+    with patch.object(scheduler.scheduler, 'running', True):
+        scheduler.scheduler.shutdown = MagicMock()
+        
         await scheduler.stop()
         
         scheduler.scheduler.shutdown.assert_called_once()
@@ -139,11 +137,9 @@ async def test_stop():
 async def test_stop_not_running():
     """Тестирует остановку планировщика когда он не запущен"""
     scheduler = ScrapingScheduler()
-    scheduler.scheduler.shutdown = MagicMock()
-    
-    # Мокаем свойство running через PropertyMock
-    with patch.object(type(scheduler.scheduler), 'running', new_callable=PropertyMock) as mock_running:
-        mock_running.return_value = False
+    with patch.object(scheduler.scheduler, 'running', False):
+        scheduler.scheduler.shutdown = MagicMock()
+        
         await scheduler.stop()
         
         # shutdown не должен быть вызван если планировщик не запущен
@@ -155,11 +151,9 @@ async def test_stop_not_running():
 async def test_stop_with_exception():
     """Тестирует обработку исключений при остановке планировщика"""
     scheduler = ScrapingScheduler()
-    scheduler.scheduler.shutdown = MagicMock(side_effect=Exception("Shutdown error"))
-    
-    # Мокаем свойство running через PropertyMock
-    with patch.object(type(scheduler.scheduler), 'running', new_callable=PropertyMock) as mock_running:
-        mock_running.return_value = True
+    with patch.object(scheduler.scheduler, 'running', True):
+        scheduler.scheduler.shutdown = MagicMock(side_effect=Exception("Shutdown error"))
+        
         # Не должно выбрасывать исключение
         await scheduler.stop()
         
