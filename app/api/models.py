@@ -32,22 +32,7 @@ class ArticleListResponse(BaseModel):
     total_pages: int
 
 
-class StatusResponse(BaseModel):
-    """Модель статуса системы"""
-    database_status: str
-    scheduler_status: str
-    scheduler_jobs: List[dict]
-    uptime: str
 
-
-class StatsResponse(BaseModel):
-    """Модель статистики"""
-    total_articles: int
-    articles_today: int
-    articles_this_week: int
-    articles_this_month: int
-    latest_article_date: Optional[datetime] = None
-    oldest_article_date: Optional[datetime] = None
 
 
 class ErrorResponse(BaseModel):

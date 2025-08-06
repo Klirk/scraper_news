@@ -1,6 +1,7 @@
 """
 Основное FastAPI приложение для Financial Times скрапера
 """
+import datetime
 import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
@@ -8,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from loguru import logger
 
-from app.api.routes import articles_router, system_router
+from app.api.routes import articles_router
 from app.api.models import ErrorResponse
 from app.db.database import init_db, close_db
 
@@ -45,7 +46,6 @@ app = FastAPI(
     ## Возможности
     
     * **Статьи** - получение статей с пагинацией и фильтрацией
-    * **Система** - мониторинг статуса и статистики
     """,
     version="1.0.0",
     docs_url="/docs",
@@ -64,7 +64,6 @@ app.add_middleware(
 
 # Подключение роутеров
 app.include_router(articles_router, prefix="/api/v1")
-app.include_router(system_router, prefix="/api/v1")
 
 
 # Глобальная обработка ошибок
@@ -103,7 +102,7 @@ async def health_check():
     """Проверка здоровья сервиса"""
     return {
         "status": "healthy",
-        "timestamp": "2024-01-20T10:00:00Z"
+        "timestamp": datetime.datetime.now()
     }
 
 

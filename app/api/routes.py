@@ -1,45 +1,20 @@
 """
-API маршруты для работы со статьями и скрапером
+API маршруты для работы со статьями
 """
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Optional
 from fastapi import APIRouter, HTTPException, Depends, Query
 from sqlalchemy import select, func, desc, and_
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.exc import SQLAlchemyError
 
 from app.db.database import get_session
 from app.models.models import Article
 from app.api.models import (
-    ArticleResponse, ArticleListResponse, StatusResponse, StatsResponse
+    ArticleResponse, ArticleListResponse
 )
-from app.scraper.scraper import FTScraper
-from app.scheduler.scheduler import ScrapingScheduler
-
 # Роутеры для группировки endpoints
 articles_router = APIRouter(prefix="/articles", tags=["Articles"])
-system_router = APIRouter(prefix="/system", tags=["System"])
-
-# Глобальные переменные для скрапера и планировщика
-_scraper_instance: Optional[FTScraper] = None
-_scheduler_instance: Optional[ScrapingScheduler] = None
-
-
-def get_scraper() -> FTScraper:
-    """Получить экземпляр скрапера"""
-    global _scraper_instance
-    if _scraper_instance is None:
-        _scraper_instance = FTScraper()
-    return _scraper_instance
-
-
-def get_scheduler() -> ScrapingScheduler:
-    """Получить экземпляр планировщика"""
-    global _scheduler_instance
-    if _scheduler_instance is None:
-        _scheduler_instance = ScrapingScheduler()
-    return _scheduler_instance
 
 
 # ARTICLES ENDPOINTS
@@ -122,93 +97,4 @@ async def get_article(
     return ArticleResponse.model_validate(article)
 
 
-# SYSTEM ENDPOINTS
 
-@system_router.get("/status", response_model=StatusResponse)
-async def get_system_status(
-        db: AsyncSession = Depends(get_session),
-        scheduler: ScrapingScheduler = Depends(get_scheduler)
-):
-    """Получить статус системы"""
-
-    # Проверяем статус базы данных
-    try:
-        await db.execute(select(func.count(Article.id)))
-        db_status = "connected"
-    except SQLAlchemyError:
-        db_status = "error"
-
-    # Получаем информацию о планировщике
-    scheduler_status = "running" if scheduler.scheduler.running else "stopped"
-
-    # Получаем список задач планировщика
-    jobs = []
-    for job in scheduler.scheduler.get_jobs():
-        jobs.append({
-            "id": job.id,
-            "name": job.name,
-            "next_run": job.next_run_time.isoformat() if job.next_run_time else None,
-            "trigger": str(job.trigger)
-        })
-
-    return StatusResponse(
-        database_status=db_status,
-        scheduler_status=scheduler_status,
-        scheduler_jobs=jobs,
-        uptime="unknown"  # Можно добавить отслеживание времени работы
-    )
-
-
-@system_router.get("/stats", response_model=StatsResponse)
-async def get_system_stats(db: AsyncSession = Depends(get_session)):
-    """Получить статистику системы"""
-
-    # Общее количество статей
-    total_result = await db.execute(select(func.count(Article.id)))
-    total_articles = total_result.scalar()
-
-    # Статьи за сегодня
-    today = datetime.now().date()
-    today_start = datetime.combine(today, datetime.min.time())
-    today_end = datetime.combine(today, datetime.max.time())
-
-    today_result = await db.execute(
-        select(func.count(Article.id)).where(
-            and_(Article.published_at >= today_start, Article.published_at <= today_end)
-        )
-    )
-    articles_today = today_result.scalar()
-
-    # Статьи за неделю
-    week_ago = datetime.now() - timedelta(days=7)
-    week_result = await db.execute(
-        select(func.count(Article.id)).where(Article.published_at >= week_ago)
-    )
-    articles_this_week = week_result.scalar()
-
-    # Статьи за месяц
-    month_ago = datetime.now() - timedelta(days=30)
-    month_result = await db.execute(
-        select(func.count(Article.id)).where(Article.published_at >= month_ago)
-    )
-    articles_this_month = month_result.scalar()
-
-    # Самая новая и старая статья
-    latest_result = await db.execute(
-        select(func.max(Article.published_at))
-    )
-    latest_date = latest_result.scalar()
-
-    oldest_result = await db.execute(
-        select(func.min(Article.published_at))
-    )
-    oldest_date = oldest_result.scalar()
-
-    return StatsResponse(
-        total_articles=total_articles,
-        articles_today=articles_today,
-        articles_this_week=articles_this_week,
-        articles_this_month=articles_this_month,
-        latest_article_date=latest_date,
-        oldest_article_date=oldest_date
-    )
